@@ -1,0 +1,5 @@
+Marker Monitors 		- Replaces Lamp Posts with their equivalents from the 8-bit version of Sonic the Hedgehog.
+Phobos Cut 			- A general tweaks and improvements mod!
+Prototype LZ Background 	- Restores the background from the Sonic 1 prototype, and adds parallax scrolling.
+Sidekick Virtual Sonic 		- Replaces player 2 Tails with the holographic sonic from early Sonic CD prototypes.
+Super Forms Attract Rings 	- Adds functionality for super forms that causes them to attract rings.

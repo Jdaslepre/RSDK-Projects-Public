@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <palette />
+  <objects />
+  <variables />
+  <sounds>
+    <soundfx name="CD Jump" path="Global/CDJump.wav" />
+    <soundfx name="CD Skidding" path="Global/CDSkidding.wav" />
+    <soundfx name="CD Charge" path="Global/CDCharge.wav" />
+    <soundfx name="CD Release" path="Global/CDRelease.wav" />
+  </sounds>
+  <players />
+  <presentationStages />
+  <regularStages />
+  <specialStages />
+  <bonusStages />
+</game>

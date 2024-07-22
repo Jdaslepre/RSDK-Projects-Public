@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <palette>
+    <color bank="0" index="48" r="128" g="0" b="0" />
+    <color bank="0" index="49" r="224" g="0" b="0" />
+    <color bank="0" index="50" r="224" g="64" b="32" />
+    <color bank="0" index="51" r="224" g="128" b="64" />
+  </palette>
+  <objects />
+  <variables />
+  <sounds />
+  <players>
+    <player name="MIGHTY" />
+  </players>
+  <presentationStages />
+  <regularStages />
+  <specialStages />
+  <bonusStages />
+</game>
