@@ -1,5 +1,3 @@
-# Mods, pushed straight from the manufacturing line!
-
 This repo is a collection of mods for the RSDK decompilations created by Jd and Nd.
 
 ![First example of a mod on the repo!](RepoAssets/MarkerMonitor.png)
