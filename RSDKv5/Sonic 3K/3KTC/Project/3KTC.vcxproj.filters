@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\GameAPI\CPP\GameAPI\Game.cpp">
+    <ClCompile Include="..\..\..\GameAPI\CPP\GameAPI\Game.cpp">
       <Filter>GameAPI</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
@@ -51,13 +51,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\GameAPI\CPP\GameAPI\Game.hpp">
+    <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\Game.hpp">
       <Filter>GameAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\GameAPI\CPP\GameAPI\GameObjects.hpp">
+    <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameObjects.hpp">
       <Filter>GameAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\GameAPI\CPP\GameAPI\GameVariables.hpp">
+    <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameVariables.hpp">
       <Filter>GameAPI</Filter>
     </ClInclude>
     <ClInclude Include="config.hpp">

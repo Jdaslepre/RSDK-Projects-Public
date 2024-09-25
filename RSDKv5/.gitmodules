@@ -1,0 +1,3 @@
+[submodule "GameAPI"]
+	path = GameAPI
+	url = https://github.com/RSDKModding/RSDKv5-GameAPI
