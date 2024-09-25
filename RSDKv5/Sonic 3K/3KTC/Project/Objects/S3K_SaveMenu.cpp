@@ -2,7 +2,8 @@
 
 using namespace RSDK;
 
-namespace GameLogic {
+namespace GameLogic
+{
 
 // -------------------
 // Object Registration
@@ -21,18 +22,21 @@ Action<void> S3K_SaveMenu::State_CursorMove;
 // Standard Entity Events
 // ----------------------
 
-void S3K_SaveMenu::Update() {
+void S3K_SaveMenu::Update()
+{
     this->Action_Back();
     sVars->Super(SUPER_UPDATE);
     this->Action_DragScreen();
 }
 
-void S3K_SaveMenu::Draw() {
+void S3K_SaveMenu::Draw()
+{
     this->Draw_Back();
     sVars->Super(SUPER_DRAW);
 }
 
-void S3K_SaveMenu::StageLoad() {
+void S3K_SaveMenu::StageLoad()
+{
     sVars->Super(SUPER_STAGELOAD);
 
     modSVars->aniFrames.Load("3K_Menu/Menu_TouchEx.bin", SCOPE_STAGE);
@@ -42,8 +46,10 @@ void S3K_SaveMenu::StageLoad() {
     modSVars->backActionPending = false;
 }
 
-void S3K_SaveMenu::StaticLoad(Static *sVars) {
+void S3K_SaveMenu::StaticLoad(Static *sVars)
+{
     RSDK_INIT_STATIC_VARS(S3K_SaveMenu);
+
     sVars->sfxButton.Init();
 }
 
@@ -51,8 +57,9 @@ void S3K_SaveMenu::StaticLoad(Static *sVars) {
 // Extra Entity Functions
 // ----------------------
 
-void S3K_SaveMenu::Action_Back() {
-    GameSpriteFrame *backFrame = &modSVars->aniFrames.GetFrame(0, 0)->frame;
+void S3K_SaveMenu::Action_Back()
+{
+    SpriteFrame *backFrame = modSVars->aniFrames.GetFrame(0, 0);
 
     int32 touchX = (screenInfo->size.x - backFrame->width - 6);
     int32 touchY = (screenInfo->size.y - backFrame->height - 6);
@@ -61,11 +68,13 @@ void S3K_SaveMenu::Action_Back() {
         // check if we're touching the back button
         modSVars->backActionPending = true;
         modSVars->touchDown         = true;
-    } else if (modSVars->touchDown && CheckAnyTouch()) {
+    }
+    else if (modSVars->touchDown && CheckAnyTouch()) {
         // check if we slid off the button, so cancel the scene transition
         modSVars->backActionPending = false;
         modSVars->touchDown         = false;
-    } else if (modSVars->backActionPending) {
+    }
+    else if (modSVars->backActionPending) {
         // if we really mean to go back, just go back
         modSVars->backActionPending = false;
         modSVars->touchDown         = false;
@@ -73,8 +82,9 @@ void S3K_SaveMenu::Action_Back() {
     }
 }
 
-void S3K_SaveMenu::Draw_Back() {
-    GameSpriteFrame *backFrame = &modSVars->aniFrames.GetFrame(0, 0)->frame;
+void S3K_SaveMenu::Draw_Back()
+{
+    SpriteFrame *backFrame = modSVars->aniFrames.GetFrame(0, 0);
 
     uint8 prevInk   = this->inkEffect;
     int32 prevAlpha = this->alpha;
@@ -83,8 +93,8 @@ void S3K_SaveMenu::Draw_Back() {
     this->alpha     = modSVars->touchDown ? 224 : 255;
 
     Vector2 drawPos;
-    drawPos.x.whole            = screenInfo->size.x - backFrame->width;
-    drawPos.y.whole            = screenInfo->size.y - backFrame->height;
+    drawPos.x                  = TO_FIXED(screenInfo->size.x - backFrame->width);
+    drawPos.y                  = TO_FIXED(screenInfo->size.y - backFrame->height);
     modSVars->animator.frameID = 0;
     modSVars->animator.DrawSprite(&drawPos, true);
 
@@ -97,7 +107,8 @@ void S3K_SaveMenu::Draw_Back() {
     this->alpha     = prevAlpha;
 }
 
-void S3K_SaveMenu::Action_DragScreen() {
+void S3K_SaveMenu::Action_DragScreen()
+{
     int32 touches = Touch::CheckRect(0, 0, screenInfo->size.x, screenInfo->size.y, 0, 0);
     int32 touchX  = (int32)(touchInfo->x[touches] * screenInfo->size.x);
 
@@ -116,7 +127,8 @@ void S3K_SaveMenu::Action_DragScreen() {
 
             if (touches <= -1) {
                 modSVars->touchState = 2; // MENUCONTROL_STATEINPUT_HANDLEMOVEMENT
-            } else {
+            }
+            else {
                 modSVars->autoButtonMoveVelocity = 0;
                 modSVars->dragTouchDistance      = (modSVars->dragTouchX - touchX);
 
@@ -136,7 +148,7 @@ void S3K_SaveMenu::Action_DragScreen() {
                 modSVars->touchState = 3;
 
             int32 nextStartX         = 0;
-            FixedPoint nearestStartX = 0;
+            int32 nearestStartX = 0;
             int32 moveVel            = 0;
 
             bool32 selectionChanged = false;
@@ -156,7 +168,7 @@ void S3K_SaveMenu::Action_DragScreen() {
 
                 if (nearestSlot && (nearestSlot != activeSlot || nearestStartX != this->cursorPos)) {
                     this->activeSaveSlot   = nearestSlot->Slot();
-                    this->velocity.x.whole = (nearestStartX > this->cursorPos) ? 7 : -7;
+                    this->velocity.x = (nearestStartX > this->cursorPos) ? TO_FIXED(7) : -TO_FIXED(7);
 
                     activeSlot->saveActive = false;
                     selectionChanged       = true;
@@ -174,10 +186,11 @@ void S3K_SaveMenu::Action_DragScreen() {
 
         case 3: { // MENUCONTROL_STATEINPUT_MOVE
             if (touches > 0) {
-                modSVars->touchState = 1; // MENUCONTROL_STATEINPUT_HANDLEDRAG;
+                modSVars->touchState            = 1; // MENUCONTROL_STATEINPUT_HANDLEDRAG;
                 modSVars->lastDragTouchDistance = 0.0;
                 modSVars->dragTouchX            = touchX;
-            } else {
+            }
+            else {
                 modSVars->buttonMovePos += (modSVars->targetButtonMovePos - modSVars->buttonMovePos);
                 if (abs(modSVars->targetButtonMovePos - modSVars->buttonMovePos) < 0.00025) {
                     modSVars->buttonMovePos = modSVars->targetButtonMovePos;
@@ -188,7 +201,7 @@ void S3K_SaveMenu::Action_DragScreen() {
         }
     }
 
-    this->cursorPos.whole += modSVars->buttonMovePos;
+    this->cursorPos += TO_FIXED(modSVars->buttonMovePos);
 }
 
 } // namespace GameLogic

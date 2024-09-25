@@ -2,7 +2,8 @@
 
 using namespace RSDK;
 
-namespace GameLogic {
+namespace GameLogic
+{
 
 // -------------------
 // Object Registration
@@ -14,7 +15,8 @@ MOD_REGISTER_OBJECT(DebugMode);
 // Standard Entity Events
 // ----------------------
 
-void DebugMode::Update(void) {
+void DebugMode::Update(void)
+{
     ControllerState *controller = &controllerInfo[Input::CONT_P1];
 
     Touch::Control8Dir(controller);
@@ -38,7 +40,8 @@ void DebugMode::Update(void) {
             }
 
             Player::modSVars->touchJump = true;
-        } else {
+        }
+        else {
             if (!Player::modSVars->touchJump) {
                 sVars->itemType--;
 
@@ -53,7 +56,8 @@ void DebugMode::Update(void) {
 
             Player::modSVars->touchJump = true;
         }
-    } else {
+    }
+    else {
         if (Touch::CheckRect(screenInfo->center.x, 96, screenInfo->size.x, screenInfo->size.y, NULL, NULL) >= 0) {
             controllerInfo->keyC.down = true;
             controller->keyC.down     = true;
@@ -62,7 +66,8 @@ void DebugMode::Update(void) {
                 controller->keyC.press     = true;
             }
             Player::modSVars->touchJump = controller->keyC.down;
-        } else
+        }
+        else
             Player::modSVars->touchJump = false;
     }
 
@@ -82,15 +87,16 @@ void DebugMode::Update(void) {
     sVars->Super(SUPER_UPDATE);
 }
 
-void DebugMode::Draw(void) {
+void DebugMode::Draw(void)
+{
     sVars->Super(SUPER_DRAW);
 
     int32 prevDir   = this->direction;
     this->direction = FLIP_NONE;
 
     Vector2 drawPos;
-    drawPos.x.whole = screenInfo->center.x;
-    drawPos.y.whole = 16;
+    drawPos.x = TO_FIXED(screenInfo->center.x);
+    drawPos.y = TO_FIXED(16);
 
     // X
     modSVars->animator.frameID = 0;
@@ -103,7 +109,8 @@ void DebugMode::Draw(void) {
     this->direction = prevDir;
 }
 
-void DebugMode::StageLoad(void) {
+void DebugMode::StageLoad(void)
+{
     if (globals->gameSpriteStyle == GAME_SM)
         modSVars->aniFrames.Load("Global/TouchControls.bin", SCOPE_STAGE);
     else

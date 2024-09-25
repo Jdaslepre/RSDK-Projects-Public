@@ -2,7 +2,8 @@
 
 using namespace RSDK;
 
-namespace GameLogic {
+namespace GameLogic
+{
 
 // -------------------
 // Object Registration
@@ -14,18 +15,20 @@ MOD_REGISTER_OBJECT(SlotHUD);
 // Standard Entity Events
 // ----------------------
 
-void SlotHUD::Create(void *data) {
+void SlotHUD::Create(void *data)
+{
     sVars->Super(SUPER_CREATE, data);
 
     if (!sceneInfo->inEditor) {
-        this->lifePos.x       = TO_FIXED(screenInfo->size.x - 64);
-        this->lifePos.y.whole = 24;
+        this->lifePos.x = TO_FIXED(screenInfo->size.x - 64);
+        this->lifePos.y = TO_FIXED(24);
     }
 }
 
 void SlotHUD::Draw(void) { this->DrawMobile(); }
 
-void SlotHUD::StageLoad(void) {
+void SlotHUD::StageLoad(void)
+{
     sVars->Super(SUPER_STAGELOAD);
 
     if (globals->gameSpriteStyle == GAME_SM)
@@ -41,7 +44,8 @@ void SlotHUD::StageLoad(void) {
 // Extra Entity Functions
 // ----------------------
 
-void SlotHUD::DrawMobile(void) {
+void SlotHUD::DrawMobile(void)
+{
     S1SS_Player *player = RSDK_GET_ENTITY(sceneInfo->currentScreenID, S1SS_Player);
 
     Vector2 drawPos;
@@ -63,14 +67,15 @@ void SlotHUD::DrawMobile(void) {
     if (!this->enableRingFlash || globals->persistentTimer & 8) {
         this->numbersAnimator.frameID = 0;
         drawPos.x                     = ringsPos.x + (this->extendedHUD ? 0x630000 : 0x4B0000);
-        drawPos.y                     = ringsPos.y + TO_FIXED(this->numbersAnimator.frames[0].frame.height);
+        drawPos.y                     = ringsPos.y + TO_FIXED(this->numbersAnimator.frames[0].height);
 
         if (player->hyperRing) {
             HUD_DrawNumbersBase10(&this->hyperNumbersAnimator, &drawPos, player->rings, 0);
             drawPos.x -= 0x40000;
             this->hyperNumbersAnimator.frameID = 10;
             this->hyperNumbersAnimator.DrawSprite(&drawPos, true);
-        } else
+        }
+        else
             HUD_DrawNumbersBase10(&this->numbersAnimator, &drawPos, player->rings, 0);
     }
 
@@ -91,11 +96,11 @@ void SlotHUD::DrawMobile(void) {
             // Draw Player YPos
             drawPos.x = TO_FIXED(screenInfo[player->camera->screenID].size.x - 16);
             drawPos.y += 0x100000;
-            HUD_DrawNumbersBase16((HUD *)this, &drawPos, player->position.y.whole);
+            HUD_DrawNumbersBase16((HUD *)this, &drawPos, TO_FIXED(player->position.y));
 
             // Draw Player XPos
             drawPos.x -= 0x90000;
-            HUD_DrawNumbersBase16((HUD *)this, &drawPos, player->position.x.whole);
+            HUD_DrawNumbersBase16((HUD *)this, &drawPos, TO_FIXED(player->position.x));
         }
     }
 
@@ -105,7 +110,8 @@ void SlotHUD::DrawMobile(void) {
         this->lifeIconAnimator.frameID  = this->lifeIconAnimator.frameCount - 1;
         this->lifeNamesAnimator.frameID = this->lifeIconAnimator.frameID;
         lives                           = globals->coinCount;
-    } else {
+    }
+    else {
         lives                           = this->lives[player->playerID];
         this->lifeIconAnimator.frameID  = HUD_CharacterIndexFromID(player->characterID);
         this->lifeNamesAnimator.frameID = HUD_CharacterIndexFromID(player->characterID);
@@ -118,7 +124,8 @@ void SlotHUD::DrawMobile(void) {
     if (this->lifeIconAnimator.frameID < 0) {
         this->lifeIconAnimator.frameID = this->lifeFrameIDs[SLOT_PLAYER1];
         lives--;
-    } else {
+    }
+    else {
         this->lifeFrameIDs[SLOT_PLAYER1] = this->lifeIconAnimator.frameID;
         this->lives[player->playerID]    = player->lives;
     }
@@ -130,7 +137,8 @@ void SlotHUD::DrawMobile(void) {
             if (sVars->stockFlashTimers[p] > 0)
                 sVars->stockFlashTimers[p]--;
         }
-    } else {
+    }
+    else {
         switch (globals->gameSpriteStyle) {
             case GAME_S1:
             case GAME_CD:
@@ -159,7 +167,8 @@ void SlotHUD::DrawMobile(void) {
     this->DrawTouchControls();
 }
 
-void SlotHUD::DrawTouchControls(void) {
+void SlotHUD::DrawTouchControls(void)
+{
     int32 playerID      = sceneInfo->currentScreenID;
     S1SS_Player *player = RSDK_GET_ENTITY(playerID, S1SS_Player);
 
@@ -215,7 +224,8 @@ void SlotHUD::DrawTouchControls(void) {
             this->alpha                         = opacity;
             modSVars->dpadTouchAnimator.frameID = 6;
             modSVars->dpadTouchAnimator.DrawSprite(&modSVars->dpadPos, true);
-        } else {
+        }
+        else {
             this->alpha                    = modSVars->dpadAlpha[playerID];
             modSVars->dpadAnimator.frameID = 6;
             modSVars->dpadAnimator.DrawSprite(&modSVars->dpadPos, true);
@@ -229,11 +239,13 @@ void SlotHUD::DrawTouchControls(void) {
             if (player->classID == S1SS_Player::sVars->classID ? player->left : controller->keyLeft.down) {
                 modSVars->dpadTouchAnimator.frameID = 14;
                 modSVars->dpadTouchAnimator.DrawSprite(&modSVars->dpadPos, true);
-            } else if (player->classID == S1SS_Player::sVars->classID ? player->right : controller->keyRight.down) {
+            }
+            else if (player->classID == S1SS_Player::sVars->classID ? player->right : controller->keyRight.down) {
                 modSVars->dpadTouchAnimator.frameID = 15;
                 modSVars->dpadTouchAnimator.DrawSprite(&modSVars->dpadPos, true);
             }
-        } else {
+        }
+        else {
             this->alpha                    = modSVars->dpadAlpha[playerID];
             modSVars->dpadAnimator.frameID = 9;
             modSVars->dpadAnimator.DrawSprite(&modSVars->dpadPos, true);
@@ -243,7 +255,8 @@ void SlotHUD::DrawTouchControls(void) {
             this->alpha                         = opacity;
             modSVars->dpadTouchAnimator.frameID = 7;
             modSVars->dpadTouchAnimator.DrawSprite(&modSVars->dpadPos, true);
-        } else {
+        }
+        else {
             this->alpha                    = modSVars->dpadAlpha[playerID];
             modSVars->dpadAnimator.frameID = 7;
             modSVars->dpadAnimator.DrawSprite(&modSVars->dpadPos, true);
@@ -257,11 +270,13 @@ void SlotHUD::DrawTouchControls(void) {
             if (player->classID == S1SS_Player::sVars->classID ? player->left : controller->keyLeft.down) {
                 modSVars->dpadTouchAnimator.frameID = 12;
                 modSVars->dpadTouchAnimator.DrawSprite(&modSVars->dpadPos, true);
-            } else if (player->classID == S1SS_Player::sVars->classID ? player->right : controller->keyRight.down) {
+            }
+            else if (player->classID == S1SS_Player::sVars->classID ? player->right : controller->keyRight.down) {
                 modSVars->dpadTouchAnimator.frameID = 13;
                 modSVars->dpadTouchAnimator.DrawSprite(&modSVars->dpadPos, true);
             }
-        } else {
+        }
+        else {
             this->alpha                    = modSVars->dpadAlpha[playerID];
             modSVars->dpadAnimator.frameID = 8;
             modSVars->dpadAnimator.DrawSprite(&modSVars->dpadPos, true);
@@ -274,7 +289,8 @@ void SlotHUD::DrawTouchControls(void) {
             modSVars->dpadAnimator.frameID = 11;
             modSVars->dpadAnimator.DrawSprite(&modSVars->dpadPos, true);
         }
-    } else {
+    }
+    else {
         // Fade out
         if (modSVars->dpadAlpha[playerID] >= 0)
             modSVars->dpadAlpha[playerID] -= 8;
@@ -299,12 +315,14 @@ void SlotHUD::DrawTouchControls(void) {
             this->alpha                         = opacity;
             modSVars->dpadTouchAnimator.frameID = 1;
             modSVars->dpadTouchAnimator.DrawSprite(&modSVars->actionPos, true);
-        } else {
+        }
+        else {
             this->alpha                    = modSVars->jumpAlpha[playerID];
             modSVars->dpadAnimator.frameID = 1;
             modSVars->dpadAnimator.DrawSprite(&modSVars->actionPos, true);
         }
-    } else {
+    }
+    else {
         // Fade out
         if (modSVars->jumpAlpha[playerID] >= 0)
             modSVars->jumpAlpha[playerID] -= 8;
@@ -327,7 +345,8 @@ void SlotHUD::DrawTouchControls(void) {
         this->alpha                         = modSVars->pauseAlpha[playerID];
         modSVars->dpadTouchAnimator.frameID = 5;
         modSVars->dpadTouchAnimator.DrawSprite(&modSVars->pausePos, true);
-    } else {
+    }
+    else {
         if (modSVars->pauseAlpha[playerID] > 0)
             modSVars->pauseAlpha[playerID] -= 8;
 

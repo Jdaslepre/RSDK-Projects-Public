@@ -7,10 +7,16 @@ ModConfig config;
 using namespace RSDK;
 using namespace GameLogic;
 
-#if RETRO_USE_MOD_LOADER
-extern "C" {
-bool32 LinkModLogic(RSDK::EngineInfo *info, const char *modID) {
-    InitModLogic(info, modID);
+#if RETRO_USE_MOD_LOADER && GAME_CUSTOMLINKLOGIC
+#if RETRO_REV02
+void LinkGameLogic(RSDK::EngineInfo *info)
+{
+    LinkModLogic(info, RSDK::Mod::modID);
+#else
+void LinkGameLogic(RSDK::EngineInfo info)
+{
+    LinkModLogic(&info, RSDK::Mod::modID);
+#endif
 
     // ---------------------
     // Link Global Variables
@@ -82,8 +88,6 @@ bool32 LinkModLogic(RSDK::EngineInfo *info, const char *modID) {
     Ext::StateHook<void, TitleSeq>(TitleSeq::State_WaitEx, TitleSeq_CheckSkip, true);
 
     // add kapukapu input states for player - 8/2/24
+}
 
-    return true;
-}
-}
 #endif

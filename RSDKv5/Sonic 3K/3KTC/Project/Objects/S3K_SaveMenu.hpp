@@ -55,7 +55,7 @@ struct S3K_SaveMenu : GameObject::Entity {
     uint8 gap80[4];
     Animator textAnimator;
     Animator animator;
-    FixedPoint cursorPos;
+    int32 cursorPos;
     uint16 activeSaveSlot;
     String menuText;
 

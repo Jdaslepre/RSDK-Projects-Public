@@ -35,8 +35,8 @@ void LevelSelect::Draw(void) {
     paletteBank[0].SetEntry(82, 0x000080);
 
     Vector2 drawPos;
-    drawPos.x.whole = 62;
-    drawPos.y.whole = screenInfo->size.y - 38;
+    drawPos.x = TO_FIXED(62);
+    drawPos.y = TO_FIXED(screenInfo->size.y - 38);
 
     // Dpad
     modSVars->animator.SetAnimation(modSVars->aniFrames, 0, true, 0);
@@ -69,7 +69,7 @@ void LevelSelect::Draw(void) {
         modSVars->pressed ? modSVars->animator.frameID = ButtonFrameIDs::ButtonGoDown : modSVars->animator.frameID = ButtonFrameIDs::ButtonGo;
     }
 
-    drawPos.x.whole = screenInfo->size.x - 38;
+    drawPos.x = TO_FIXED(screenInfo->size.x - 38);
     modSVars->animator.DrawSprite(&drawPos, true);
 
     this->alpha     = prevInfo[0];

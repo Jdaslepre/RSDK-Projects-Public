@@ -1,6 +1,7 @@
 #pragma once
 
-namespace RSDK {
+namespace RSDK
+{
 
 #define VoidPtr(name)      void (*name)(void)
 #define Type_VoidPtr       void (*)(void)
@@ -22,7 +23,8 @@ template <typename R> struct Action {
 
     inline void Init() { action = nullptr; }
 
-    template <typename T> inline bool Set(R (T::*action)()) {
+    template <typename T> inline bool Set(R (T::*action)())
+    {
         // converts from T:: -> Action:: without the compiler interfering :]
         union {
             R (T::*in)();
@@ -34,7 +36,8 @@ template <typename R> struct Action {
         return true;
     }
 
-    inline bool Set(R (*action)()) {
+    inline bool Set(R (*action)())
+    {
         // converts from T:: -> Action:: without the compiler interfering :]
         union {
             R (*in)();
@@ -46,7 +49,8 @@ template <typename R> struct Action {
         return true;
     }
 
-    template <typename T> inline R SetAndRun(R (T::*action)(), void *self = nullptr) {
+    template <typename T> inline R SetAndRun(R (T::*action)(), void *self = nullptr)
+    {
         bool applied = Set(action);
 
         if (applied)
@@ -55,7 +59,8 @@ template <typename R> struct Action {
         return R();
     }
 
-    template <typename T> inline R SetAndRun(R (*action)(), void *self = nullptr) {
+    template <typename T> inline R SetAndRun(R (*action)(), void *self = nullptr)
+    {
         bool applied = Set(action);
 
         if (applied)
@@ -64,7 +69,8 @@ template <typename R> struct Action {
         return R();
     }
 
-    inline R Run(void *self) {
+    inline R Run(void *self)
+    {
         if (action) {
             return (((Action *)self)->*action)();
         }
@@ -72,7 +78,8 @@ template <typename R> struct Action {
         return R();
     }
 
-    template <typename T> inline bool Matches(void *other) {
+    template <typename T> inline bool Matches(void *other)
+    {
         // converts from Action:: -> void (*)() without the compiler interfering :]
         union {
             R *in;
@@ -85,14 +92,16 @@ template <typename R> struct Action {
 
     template <typename T> inline bool Matches(R (T::*other)()) { return action == (R(Action::*)())other; }
 
-    inline bool Matches(Action *other) {
+    inline bool Matches(Action *other)
+    {
         if (other == nullptr)
             return action == nullptr;
         else
             return action == other->action;
     }
 
-    inline void Copy(Action *other) {
+    inline void Copy(Action *other)
+    {
         if (other == nullptr)
             this->action = nullptr;
         else
@@ -107,7 +116,8 @@ template <typename R> struct Action {
     inline bool operator!=(const Action &rhs) { return !(*this == rhs); }
 };
 
-namespace Ext {
+namespace Ext
+{
 
 // ---------------------
 // RSDKv5 ModAPI Helpers
@@ -118,12 +128,14 @@ template <typename T> inline static T PubFunc(const char *id, const char *functi
 template <typename T> inline static T PubFunc(const char *functionName) { return (T)Mod::GetPublicFunction(NULL, functionName); }
 
 // Using T::SomeFunction as a state
-template <typename T, typename X> inline void StateHook(T(X::*state), bool32 (*hook)(bool32 skippedState), bool32 priority) {
+template <typename T, typename X> inline void StateHook(T(X::*state), bool32 (*hook)(bool32 skippedState), bool32 priority)
+{
     modTable->RegisterStateHook(reinterpret_cast<void (*&)()>(state), hook, priority);
 }
 
 // Using an RSDK::Action as a state
-template <typename T, typename X> inline void StateHook(RSDK::Action<T> &state, bool32 (*hook)(bool32 skippedState), bool32 priority) {
+template <typename T, typename X> inline void StateHook(RSDK::Action<T> &state, bool32 (*hook)(bool32 skippedState), bool32 priority)
+{
     modTable->RegisterStateHook(reinterpret_cast<void (*&)()>(state.action), hook, priority);
 }
 
