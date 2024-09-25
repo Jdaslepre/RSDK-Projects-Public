@@ -1,0 +1,55 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RSDK.AnimationEditor.Experimental.Content.Controls"
+    xmlns:WCT="CommunityToolkit.WinUI.UI.Controls">
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="SelectionFill" Opacity="0.15" Color="#FF0078D7" />
+            <SolidColorBrush x:Key="SelectionBorder" Color="#FF0078D7" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="SelectionFill" Opacity="0.15" Color="#FF0078D7" />
+            <SolidColorBrush x:Key="SelectionBorder" Color="#FF0078D7" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <Style TargetType="local:FavoritesItemControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:FavoritesItemControl">
+                    <Grid Width="258" Height="178" Background="{ThemeResource ControlDockMain}" BorderBrush="{ThemeResource ControlDockStroke}" BorderThickness="1" CornerRadius="8" RowDefinitions="*, Auto">
+                        <Grid Grid.Row="0" Background="{ThemeResource ControlDockLayer}">
+                        </Grid>
+                        <Grid Grid.Row="1" BorderBrush="{ThemeResource ControlDockSeperationStroke}" BorderThickness="0,1,0,0">
+                            <StackPanel Orientation="Vertical" Padding="12,0" Spacing="-2" VerticalAlignment="Center">
+                                <TextBlock Text="{TemplateBinding Title}" Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                            </StackPanel>
+                            <Button x:Name="UnfavoriteButton" Style="{StaticResource IconButton}" Content="&#xE735;" ToolTipService.ToolTip="Remove from favorites" ToolTipService.Placement="Top" Margin="4" HorizontalAlignment="Right" VerticalAlignment="Stretch" Foreground="{ThemeResource IconBackgroundFill}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:CategoryControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CategoryControl">
+                    <Grid RowDefinitions="Auto, Auto">
+                        <Grid RowDefinitions="Auto" ColumnDefinitions="Auto, *">
+                            <CheckBox x:Name="ExpanderCheckBox" Style="{StaticResource ChevronExpanderToggleButtonStyle}" />
+                            <Border x:Name="TitleBorder" Grid.Column="1" Padding="{StaticResource RowGroupItemPadding}" Background="Transparent">
+                                <TextBlock Margin="{StaticResource RowGroupItemTextBlockMargin}" FontWeight="SemiBold" Style="{StaticResource BaseItemTextStyle}" Text="{TemplateBinding Title}" />
+                            </Border>
+                        </Grid>
+                        <ContentPresenter x:Name="ContentPresenter" Grid.Row="1" Content="{TemplateBinding Content}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

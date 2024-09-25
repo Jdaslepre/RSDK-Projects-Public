@@ -1,0 +1,166 @@
+﻿<Window x:Class="RSDK.AnimationEditor.Experimental.Content.Views.HitboxEditorVX"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:RSDK.AnimationEditor.Experimental.Content.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:icons="using:RSDK.AnimationEditor.Experimental.Content.Resources.Icons"
+        mc:Ignorable="d">
+
+    <Grid x:Name="rootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="AppTitleBar"
+              Height="32"
+              Grid.Row="0">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Spacing="12"
+                        Padding="12,0,0,0">
+                <FontIcon Glyph="&#xEF20;"
+                          FontSize="16"
+                          Width="16"
+                          Height="16" />
+                <TextBlock Text="Hitbox Editor"
+                           Style="{StaticResource CaptionTextBlockStyle}" />
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="List"
+                              Grid.Column="0"
+                              ItemsSource="{x:Bind ViewModel.HitboxItems}"
+                              SelectedIndex="{Binding SelectedHitboxEntryIndex, Mode=TwoWay}"
+                              SelectionChanged="List_SelectionChanged"
+                              Grid.Row="0" />
+                    <StackPanel Grid.Row="1"
+                                Orientation="Horizontal"
+                                Padding="4"
+                                Spacing="4">
+
+                        <Button Style="{StaticResource IconButton}"
+                                Foreground="{ThemeResource IconBackgroundFill}"
+                                ToolTipService.ToolTip="Create a new hitbox"
+                                ToolTipService.Placement="Top"
+                                Width="32"
+                                Height="32"
+                                Margin="0"
+                                Click="AddHitbox">
+                            <FontIcon Glyph="&#xe710;"
+                                      FontSize="16" />
+                        </Button>
+
+                        <Button Style="{StaticResource IconButton}"
+                                Foreground="{ThemeResource IconBackgroundFill}"
+                                ToolTipService.ToolTip="Remove the selected hitbox"
+                                ToolTipService.Placement="Top"
+                                IsEnabled="{Binding CanHitboxBeingRemoved}"
+                                Width="32"
+                                Height="32"
+                                Margin="0"
+                                Click="RemoveHitbox">
+                            <FontIcon Glyph="&#xE74D;"
+                                      FontSize="16" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <StackPanel Background="{ThemeResource LayerFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefault}"
+                        BorderThickness="1,1,0,0"
+                        CornerRadius="8,0,0,0"
+                        Grid.Column="1"
+                        Orientation="Vertical">
+                <StackPanel Spacing="8"
+                            Padding="8,8">
+                    <ComboBox SelectedIndex="{x:Bind ViewModel.SelectedHitboxIndex, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"
+                              Header="Collision Type">
+                        <TextBlock Text="Floor (outer box)" />
+                        <TextBlock Text="Floor (inner box)" />
+                        <TextBlock Text="Ceiling (outer box)" />
+                        <TextBlock Text="Ceiling (inner box)" />
+                        <TextBlock Text="Wall left (outer box)" />
+                        <TextBlock Text="Wall left (inner box)" />
+                        <TextBlock Text="Wall right (outer box)" />
+                        <TextBlock Text="Wall right (inner box)" />
+                    </ComboBox>
+                    <Grid RowSpacing="6"
+                          ColumnSpacing="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <NumberBox Grid.Column="0"
+                                   Grid.Row="0"
+                                   Minimum="-128"
+                                   Maximum="127"
+                                   Value="{x:Bind ViewModel.SelectedHitboxValue.Left, Mode=TwoWay}"
+                                   Header="Left"
+                                   SpinButtonPlacementMode="Inline" />
+                        <NumberBox Grid.Column="1"
+                                   Grid.Row="0"
+                                   Minimum="-128"
+                                   Maximum="127"
+                                   Value="{x:Bind ViewModel.SelectedHitboxValue.Top, Mode=TwoWay}"
+                                   Header="Top"
+                                   SpinButtonPlacementMode="Inline" />
+                        <NumberBox Grid.Column="0"
+                                   Grid.Row="1"
+                                   Minimum="-128"
+                                   Maximum="127"
+                                   Value="{x:Bind ViewModel.SelectedHitboxValue.Right, Mode=TwoWay}"
+                                   Header="Right"
+                                   SpinButtonPlacementMode="Inline" />
+                        <NumberBox Grid.Column="1"
+                                   Grid.Row="1"
+                                   Minimum="-128"
+                                   Maximum="127"
+                                   Value="{x:Bind ViewModel.SelectedHitboxValue.Bottom, Mode=TwoWay}"
+                                   Header="Bottom"
+                                   SpinButtonPlacementMode="Inline" />
+                    </Grid>
+                </StackPanel>
+
+
+                <NavigationViewItemSeparator x:Name="Separator" />
+
+                <ListView ItemsSource="{Binding AnimationsUsed}"
+                          SelectionMode="None"
+                          ShowsScrollingPlaceholders="True"
+                          ScrollViewer.VerticalScrollMode="Enabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          x:Name="UsedAnimList">
+                    <ListView.Resources>
+                        <ResourceDictionary Source="ms-appx:///Microsoft.UI.Xaml/DensityStyles/Compact.xaml" />
+                    </ListView.Resources>
+                </ListView>
+
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}"
+                           Text="No items to display"
+                           HorizontalAlignment="Center"
+                           x:Name="NoItems"
+                           Visibility="Collapsed"/>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,66 @@
+<UserControl x:Class="RSDK.AnimationEditor.Experimental.Content.Views.HitboxEditorV5"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:RSDK.AnimationEditor.Experimental,Content.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid x:Name="root"
+          Margin="-16,-17"
+          Width="200">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="AppTitleBar"
+                    Orientation="Horizontal"
+                    Padding="14,0"
+                    Spacing="14"
+                    Grid.Row="0">
+            <TextBlock FontFamily="Segoe Fluent Icons"
+                       FontSize="16"
+                       Text="&#xEF20;"
+                       VerticalAlignment="Center" />
+            <TextBlock Text="Hitbox Editor"
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+        <Grid Padding="8"
+              RowSpacing="8"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBox Text="{Binding SelectedValue, Mode=TwoWay}"
+                     LostFocus="TextBox_LostFocus"
+                     Grid.Row="0" />
+            <ListView x:Name="List"
+                      Grid.Row="1"
+                      Margin="-4,0"
+                      ItemsSource="{Binding HitboxTypeItems}"
+                      SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                      SelectedValue="{Binding SelectedValue, Mode=TwoWay}" />
+        </Grid>
+        <Grid Padding="4"
+              ColumnSpacing="4"
+              Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Add"
+                    Click="ButtonAdd_Click"
+                    IsEnabled="False"
+                    HorizontalAlignment="Stretch"
+                    Grid.Column="0" />
+            <Button Content="Remove"
+                    Click="ButtonRemove_Click"
+                    IsEnabled="False"
+                    HorizontalAlignment="Stretch"
+                    Grid.Column="1" />
+        </Grid>
+    </Grid>
+</UserControl>

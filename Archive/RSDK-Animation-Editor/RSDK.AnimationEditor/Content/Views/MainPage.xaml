@@ -1,0 +1,619 @@
+﻿<Page x:Class="RSDK.AnimationEditor.Content.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:RSDK.AnimationEditor.Content.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:AnimatedVisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
+      xmlns:icons="using:RSDK.AnimationEditor.Content.Resources.Icons"
+      mc:Ignorable="d"
+      NavigationCacheMode="Required">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="AppTitleBar"
+              x:DeferLoadStrategy="Lazy"
+              Grid.Row="0">
+            <!--
+            Don't question the column defs
+            -->
+            <Grid Height="32"
+                  VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Image Source="/Assets/WindowIcon.ico"
+                       Grid.Column="1"
+                       Width="16"
+                       Height="16" />
+                <TextBlock x:Name="AppTitleTextBlock"
+                           Text="{x:Bind ViewModel.TitleString,Mode=OneWay}"
+                           Style="{StaticResource CaptionTextBlockStyle}"
+                           VerticalAlignment="Center"
+                           Grid.Column="3" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1"
+              BorderBrush="{ThemeResource MenubarStroke}"
+              BorderThickness="0,0,0,1"
+              x:Name="MenuBarContainer">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="MenuStack"
+                        Grid.Column="0"
+                        Orientation="Horizontal">
+                <MenuBar>
+                    <MenuBarItem Title="File">
+                        <MenuFlyoutItem Text="Open"
+                                        Click="FileOpen_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe838;" />
+                            </MenuFlyoutItem.Icon>
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control"
+                                                     Key="O" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSubItem Text="Recent"
+                                           x:Name="RecentSubmenu">
+                            <MenuFlyoutSubItem.Icon>
+                                <FontIcon Glyph="&#xe823;" />
+                            </MenuFlyoutSubItem.Icon>
+                            <MenuFlyoutSeparator x:Name="RecentSeperator" />
+                            <MenuFlyoutItem Text="Clear file history"
+                                            x:Name="RecentClear">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xed60;" />
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="Save"
+                                        IsEnabled="{x:Bind ViewModel.IsAnimationDataLoaded,Mode=OneWay}"
+                                        Click="FileSave_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe74e;" />
+                            </MenuFlyoutItem.Icon>
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control"
+                                                     Key="S" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Save as"
+                                        IsEnabled="{x:Bind ViewModel.IsAnimationDataLoaded,Mode=OneWay}"
+                                        Click="FileSaveAs_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe792;" />
+                            </MenuFlyoutItem.Icon>
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control,Shift"
+                                                     Key="S" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator HorizontalAlignment="Stretch" />
+                        <MenuFlyoutItem Text="Exit"
+                                        Click="FileExit_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe8a7;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                    </MenuBarItem>
+                    <MenuBarItem Title="View">
+                        <MenuFlyoutSubItem Text="Zoom">
+                            <MenuFlyoutSubItem.Icon>
+                                <FontIcon Glyph="&#xE743;" />
+                            </MenuFlyoutSubItem.Icon>
+                            <MenuFlyoutItem Text="Zoom in" />
+                            <MenuFlyoutItem Text="Zoom out" />
+                            <MenuFlyoutItem Text="Restore default zoom"
+                                            x:Name="ZoomRestore">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control" />
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="Hitbox manager"
+                                        IsEnabled="{x:Bind ViewModel.IsAnimationDataLoaded, Mode=OneWay}"
+                                        Click="ViewHitbox_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe9a6;" />
+                            </MenuFlyoutItem.Icon>
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control"
+                                                     Key="H" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Texture manager"
+                                        IsEnabled="{x:Bind ViewModel.IsAnimationDataLoaded, Mode=OneWay}"
+                                        Click="ViewTexture_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xe8b9;" />
+                            </MenuFlyoutItem.Icon>
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Modifiers="Control"
+                                                     Key="T" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                    </MenuBarItem>
+                </MenuBar>
+                <AppBarSeparator />
+                <Button Style="{StaticResource IconButton}"
+                        Margin="4,0"
+                        IsEnabled="{x:Bind ViewModel.IsAnimationDataLoaded, Mode=OneWay}"
+                        ToolTipService.ToolTip="Save"
+                        Click="FileSave_Click">
+                    <FontIcon Glyph="&#xe74e;"
+                              FontSize="16" />
+                </Button>
+                <AppBarSeparator />
+                <Button Style="{StaticResource IconButton}"
+                        Margin="4,0"
+                        IsEnabled="False">
+                    <FontIcon Glyph="&#xe7a7;"
+                              FontSize="16" />
+                </Button>
+                <Button Style="{StaticResource IconButton}"
+                        Margin="4,0"
+                        IsEnabled="False">
+                    <FontIcon Glyph="&#xe7a6;"
+                              FontSize="16" />
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="4"
+                        Padding="4,0"
+                        Grid.Column="1">
+                <ToggleButton Margin="0"
+                              Visibility="{x:Bind ViewModel.HitboxV5Visibility,Mode=OneWay}"
+                              Style="{StaticResource ViewSwitch}"
+                              Click="Col2FrameView"
+                              x:Name="ViewMode" />
+                <Button Click="Settings_Click"
+                        Style="{StaticResource IconButton}"
+                        Margin="0">
+                    <AnimatedIcon Width="16"
+                                  AnimatedIcon.State="Normal">
+                        <AnimatedIcon.Source>
+                            <AnimatedVisuals:AnimatedSettingsVisualSource />
+                        </AnimatedIcon.Source>
+                        <AnimatedIcon.FallbackIconSource>
+                            <FontIconSource Glyph="&#xe713;" />
+                        </AnimatedIcon.FallbackIconSource>
+                    </AnimatedIcon>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2"
+              ColumnSpacing="6"
+              Padding="6"
+              Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}"
+              x:Name="Content">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0"
+                  x:Name="Column0"
+                  x:DeferLoadStrategy="Lazy">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+
+                <ListView ItemsSource="{x:Bind ViewModel.Animations,Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.SelectedAnimation, Mode=TwoWay}"
+                          SelectedIndex="{x:Bind ViewModel.SelectedAnimationIndex, Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          Margin="-4,0">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            BorderThickness="0,1,0,0"
+                            x:Name="hhh"
+                            x:Load="False"
+                            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                            VerticalAlignment="Bottom">
+                    <Button Style="{StaticResource IconButton}"
+                            ToolTipService.ToolTip="Add a new texture"
+                            ToolTipService.Placement="Top"
+                            Width="36"
+                            Height="36"
+                            Margin="0">
+                        <FontIcon Glyph="&#xe710;"
+                                  FontSize="16" />
+                    </Button>
+                    <Button Style="{StaticResource IconButton}"
+                            ToolTipService.ToolTip="Remove the selected item"
+                            ToolTipService.Placement="Top"
+                            IsEnabled="{Binding IsValueSelected}"
+                            Width="36"
+                            Height="36"
+                            Margin="0">
+                        <FontIcon Glyph="&#xe74d;"
+                                  FontSize="16" />
+                    </Button>
+                    <Button x:Name="Import"
+                            x:Load="False"
+                            Style="{StaticResource IconButton}"
+                            Content="&#xe8b5;"
+                            IsEnabled="False"
+                            Width="32"
+                            Height="32" />
+                    <Button x:Name="Export"
+                            x:Load="False"
+                            Style="{StaticResource IconButton}"
+                            Content="&#xede1;"
+                            IsEnabled="False"
+                            Width="32"
+                            Height="32" />
+                    <Button Style="{StaticResource IconButton}"
+                            ToolTipService.ToolTip="Replace current texture"
+                            ToolTipService.Placement="Top"
+                            IsEnabled="{Binding IsValueSelected}"
+                            Width="36"
+                            Height="36"
+                            Margin="0">
+                        <FontIcon Glyph="&#xe895;"
+                                  FontSize="16" />
+                    </Button>
+
+                    <Button Style="{StaticResource IconButton}"
+                            ToolTipService.ToolTip="Open file location"
+                            ToolTipService.Placement="Top"
+                            IsEnabled="{Binding IsValueSelected}"
+                            Width="36"
+                            Height="36"
+                            Margin="0">
+                        <FontIcon Glyph="&#xe197;"
+                                  FontSize="16" />
+                    </Button>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid x:Name="Column1"
+                  x:DeferLoadStrategy="Lazy"
+                  Grid.Column="1"
+                  RowSpacing="8">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!--Main canvas-->
+                <Border Background="{ThemeResource CanvasBackground}"
+                        BackgroundSizing="OuterBorderEdge"
+                        BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Grid.Row="0"
+                        Translation="0,0,12">
+
+                    <Border.Shadow>
+                        <ThemeShadow />
+                    </Border.Shadow>
+
+                    <Grid>
+
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   Margin="8,4"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Top"
+                                   RequestedTheme="Dark">
+                                <Run Text="Frame " />
+                                <Run Text="{Binding SelectedFrameIndex, Mode=OneWay}" />
+                                <Run Text="-" />
+                                <Run Text="{Binding FramesCount, Mode=OneWay}" />
+                        </TextBlock>
+
+                        <Canvas Background="Transparent">
+                            <Image Source="{x:Bind ViewModel.Sprite,Mode=OneWay}"
+                                   Canvas.Left="{Binding SpriteLeft, Mode=OneWay}"
+                                   Canvas.Top="{Binding SpriteTop, Mode=OneWay}"
+                                   RenderTransformOrigin="{Binding SpriteCenter, Mode=OneWay}">
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="{Binding SpriteScaleX}"
+                                                        ScaleY="{Binding SpriteScaleY}" />
+                                        <SkewTransform />
+                                        <RotateTransform />
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                        </Canvas>
+
+                    </Grid>
+
+                </Border>
+
+                <StackPanel Grid.Row="1"
+                            Background="{ThemeResource DockBackground}"
+                            BorderBrush="{ThemeResource ControlElevationBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Translation="0,0,12"
+                            Orientation="Vertical">
+
+                    <StackPanel.Shadow>
+                        <ThemeShadow />
+                    </StackPanel.Shadow>
+
+                    <ListBox Background="Transparent"
+                             ItemsSource="{x:Bind ViewModel.AnimationFrames,Mode=OneWay}"
+                             ItemContainerStyle="{StaticResource ModernListBoxItemStyle}"
+                             Padding="3"
+                             SelectedIndex="{x:Bind ViewModel.SelectedFrameIndex, Mode=TwoWay}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollMode="Auto"
+                             x:Name="FramesList">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Sprite}"
+                                       Width="48"
+                                       Height="48" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Grid Padding="3"
+                          ColumnSpacing="3"
+                          BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                          BorderThickness="0,1,0,0"
+                          x:Name="heeee">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Resources>
+                            <ResourceDictionary>
+                                <Style BasedOn="{StaticResource IconButton}"
+                                       TargetType="Button"
+                                       x:Key="CanvasControlStackButton">
+
+                                    <Setter Property="FontFamily"
+                                            Value="{StaticResource SymbolThemeFontFamily}" />
+                                    <Setter Property="FontSize"
+                                            Value="16" />
+                                    <Setter Property="Height"
+                                            Value="30" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="Width"
+                                            Value="30" />
+                                    <Setter Property="Margin"
+                                            Value="0" />
+
+                                </Style>
+
+                                <Style BasedOn="{StaticResource DefaultToggleButtonStyle}"
+                                       TargetType="ToggleButton"
+                                       x:Key="CanvasControlStackToggleButton">
+                                    <Setter Property="FontFamily"
+                                            Value="{StaticResource SymbolThemeFontFamily}" />
+                                    <Setter Property="FontSize"
+                                            Value="16" />
+                                    <Setter Property="Height"
+                                            Value="30" />
+                                    <Setter Property="Padding"
+                                            Value="0" />
+                                    <Setter Property="Width"
+                                            Value="30" />
+                                    <Setter Property="Background"
+                                            Value="Transparent" />
+                                    <Setter Property="BorderBrush"
+                                            Value="Transparent" />
+                                </Style>
+                            </ResourceDictionary>
+                        </Grid.Resources>
+
+
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4"
+                                    Grid.Column="0"
+                                    x:Name="CanvasControlStack"
+                                    SizeChanged="CanvasControlStack_SizeChanged">
+
+
+
+                            <ToggleButton Content="&#xf5b0;"
+                                          IsChecked="{x:Bind ViewModel.IsRunning, Mode=TwoWay}"
+                                          Style="{StaticResource CanvasControlStackToggleButton}"/>
+
+                            <AppBarSeparator />
+
+                            <Button Style="{StaticResource CanvasControlStackButton}">
+                                <icons:ZoomIn Width="16"
+                                              Height="16" />
+                            </Button>
+
+                            <Button Style="{StaticResource CanvasControlStackButton}">
+                                <icons:ZoomOut Width="16"
+                                               Height="16" />
+                            </Button>
+
+                            <AppBarSeparator />
+
+                            <Button Content="&#xe710;"
+                                    Foreground="{ThemeResource IconBackgroundFill}"
+                                    Style="{StaticResource CanvasControlStackButton}"/>
+
+                            <Button Style="{StaticResource CanvasControlStackButton}">
+                                <icons:Copy Width="16"
+                                            Height="16" />
+                            </Button>
+
+                            <Button Style="{StaticResource CanvasControlStackButton}">
+                                <icons:Delete Width="16"
+                                              Height="16" />
+                            </Button>
+
+                            <Button Content="&#xe8b5;"
+                                    Foreground="{ThemeResource IconBackgroundFill}"
+                                    Style="{StaticResource CanvasControlStackButton}"/>
+
+                            <Button Content="&#xede1;"
+                                    Foreground="{ThemeResource IconBackgroundFill}"
+                                    Style="{StaticResource CanvasControlStackButton}"/>
+
+                            <AppBarSeparator />
+
+                            <Button Content="&#xe76b;"
+                                    Foreground="{ThemeResource IconBackgroundFill}"
+                                    Style="{StaticResource CanvasControlStackButton}"/>
+
+                            <Button Content="&#xe76c;"
+                                    Foreground="{ThemeResource IconBackgroundFill}"
+                                    Style="{StaticResource CanvasControlStackButton}"/>
+
+                        </StackPanel>
+                        <AppBarSeparator Grid.Column="1"
+                                         Visibility="Collapsed" />
+                        <Button Content="&#xe712;"
+                                Foreground="{ThemeResource IconBackgroundFill}"
+                                Grid.Column="2"
+                                Style="{StaticResource CanvasControlStackButton}">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <StackPanel x:Name="overflowContentHost"
+                                                Orientation="Horizontal"
+                                                Margin="-12,-14,-12,-15"
+                                                Spacing="4"/>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </Grid>
+
+                </StackPanel>
+
+
+
+            </Grid>
+
+            <Grid Grid.Column="2"
+                  RowSpacing="4"
+                  x:Name="Column2"
+                  x:DeferLoadStrategy="Lazy">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Frame Grid.Row="0"
+                       IsEnabled="{x:Bind ViewModel.IsNotRunning,Mode=OneWay}"
+                       Loaded="Column2Frame_Loaded"
+                       x:Name="Column2Frame">
+                </Frame>
+
+                <Grid ColumnSpacing="4"
+                      Grid.Row="1">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <NumberBox Grid.Column="0"
+                               Header="Speed"
+                               Minimum="0"
+                               Maximum="65535"
+                               Value="{Binding Speed, Mode=TwoWay}"
+                               SpinButtonPlacementMode="Inline" />
+
+                    <NumberBox Grid.Column="1"
+                               Header="Loop index"
+                               Minimum="0"
+                               Maximum="255"
+                               Value="{Binding Loop, Mode=TwoWay}"
+                               SpinButtonPlacementMode="Inline" />
+
+                </Grid>
+
+                <Grid Grid.Row="2">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox Grid.Row="0"
+                              Header="Flags"
+                              HorizontalAlignment="Stretch"
+                              SelectedIndex="{Binding Flags, Mode=TwoWay}">
+                        <TextBlock Text="Default behavior" />
+                        <TextBlock Text="Full engine rotation" />
+                        <TextBlock Text="Partial engine rotation" />
+                        <TextBlock Text="Static rotation using extra frames" />
+                        <TextBlock Text="Unknown" />
+                        <TextBlock Text="UNUSED?" />
+                        <TextBlock Text="UNUSED?" />
+                        <TextBlock Text="UNUSED?" />
+                    </ComboBox>
+
+                    <ComboBox Grid.Row="1"
+                              Header="Texture"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding Textures}"
+                              SelectedIndex="{Binding SelectedFrameTexture, Mode=TwoWay}"
+                              IsEnabled="{x:Bind ViewModel.IsNotRunning,Mode=OneWay}" />
+
+                    <ComboBox Grid.Row="2"
+                              Header="Hitbox"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding HitboxItems}"
+                              Visibility="{Binding HitboxVXVisibility}"
+                              SelectedIndex="{Binding SelectedFrameHitbox, Mode=TwoWay}"
+                              IsEnabled="{x:Bind ViewModel.IsNotRunning,Mode=OneWay}" />
+
+                    <ComboBox Grid.Row="2"
+                              Header="Hitbox"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding HitboxTypes}"
+                              Visibility="{Binding HitboxV5Visibility}"
+                              SelectedIndex="{Binding SelectedHitboxType, Mode=TwoWay}"
+                              IsEnabled="{x:Bind ViewModel.IsNotRunning,Mode=OneWay}" />
+
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,64 @@
+<Page x:Class="RSDK.AnimationEditor.Experimental.Experimental.Content.Views.TabbedWindowContent"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:RSDK.AnimationEditor.Experimental.Experimental.Content.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:views="using:RSDK.AnimationEditor.Experimental.Content.Views"
+      mc:Ignorable="d"
+      NavigationCacheMode="Required">
+
+    <Grid x:Name="rootGrid">
+        <Grid x:Name="MainContent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TabView x:Name="Tabs"
+                     Canvas.ZIndex="1"
+                     VerticalAlignment="Stretch"
+                     AddTabButtonClick="TabAddButton_"
+                     TabCloseRequested="TabCloseRequested_"
+                     TabItemsChanged="Tabs_TabItemsChanged"
+                     SelectionChanged="Tabs_SelectionChanged"
+                     AllowDropTabs="True"
+                     CanDragTabs="True"
+                     CanReorderTabs="True">
+                <TabView.TabStripFooter>
+                    <Rectangle x:Name="wDragRect"
+                               Canvas.ZIndex="5"
+                               MinWidth="188"
+                               VerticalAlignment="Stretch"
+                               Grid.Column="0" />
+                </TabView.TabStripFooter>
+                <TabView.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="T"
+                                         Modifiers="Control"
+                                         Invoked="NewTabAccelerator_" />
+                    <KeyboardAccelerator Key="W"
+                                         Modifiers="Control"
+                                         Invoked="CloseTabAccelerator_" />
+                </TabView.KeyboardAccelerators>
+            </TabView>
+            <views:MainPage x:Name="MainPage"
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+            </views:MainPage>
+            <Grid.OpacityTransition>
+                <ScalarTransition Duration="0:0:0.20" />
+            </Grid.OpacityTransition>
+        </Grid>
+        <views:Settings x:Name="Settings"
+                        x:Load="False"
+                        Grid.Row="1"
+                        Canvas.ZIndex="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Opacity="0">
+            <views:Settings.OpacityTransition>
+                <ScalarTransition Duration="0:0:0.20" />
+            </views:Settings.OpacityTransition>
+        </views:Settings>
+    </Grid>
+</Page>

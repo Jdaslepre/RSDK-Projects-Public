@@ -1,0 +1,406 @@
+﻿<Window x:Class="RSDK.AnimationEditor.Experimental.Content.Views.TextureLibrary"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:RSDK.AnimationEditor.Experimental.Content.Views"
+        xmlns:viewmodels="using:RSDK.AnimationEditor.Experimental.Content.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:WCT="using:CommunityToolkit.WinUI.UI.Controls"
+        xmlns:labs="using:CommunityToolkit.Labs.WinUI"
+        mc:Ignorable="d">
+
+    <Grid x:Name="rootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="AppTitleBar"
+                    Orientation="Horizontal"
+                    Padding="14,0"
+                    Spacing="14"
+                    BorderBrush="{ThemeResource MenubarStroke}"
+                    BorderThickness="0,0,0,1"
+                    Grid.Row="0">
+            <TextBlock FontFamily="Segoe Fluent Icons"
+                       FontSize="16"
+                       Text="&#xE8F1;"
+                       VerticalAlignment="Center" />
+            <TextBlock Text="{x:Bind Title}"
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+        <Grid Background="{ThemeResource PaneMainBackground}"
+              Grid.Row="1">
+
+            <Grid.BackgroundTransition>
+                <BrushTransition />
+            </Grid.BackgroundTransition>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition x:Name="PaneColumn"
+                                  Width="Auto"
+                                  MinWidth="190" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <GridView x:Name="ContentGridView"
+                          ItemsSource="{x:Bind ViewModel.Textures,Mode=TwoWay}"
+                          SelectedIndex="{Binding SelectedIndex,Mode=TwoWay}"
+                          SelectedItem="{Binding SelectedValue,Mode=TwoWay}"
+                          IsItemClickEnabled="False"
+                          CanDragItems="False"
+                          AllowDrop="False"
+                          CanReorderItems="False"
+                          SelectionMode="Single"
+                          FlowDirection="LeftToRight"
+                          Padding="8,8,0,0"
+                          Grid.Row="0">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WCT:WrapPanel>
+                                <WCT:WrapPanel.ChildrenTransitions>
+                                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                                </WCT:WrapPanel.ChildrenTransitions>
+                            </WCT:WrapPanel>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ToolTipService.ToolTip="pizza"
+                                  ToolTipService.Placement="Mouse">
+                                <Image Stretch="UniformToFill"
+                                       Source="/Content/KTE1.gif"
+                                       Width="100"
+                                       Height="100" />
+                            </Grid>
+
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+
+                <CommandBar IsOpen="False"
+                            DefaultLabelPosition="Right"
+                            HorizontalAlignment="Left"
+                            IsSticky="False"
+                            Grid.Row="1">
+
+                    <CommandBar.PrimaryCommands>
+
+                        <AppBarButton Label="Add"
+                                      ToolTipService.ToolTip="Add a new texture"
+                                      ToolTipService.Placement="Top"
+                                      Click="Add_Click">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons"
+                                          Glyph="&#xECCD;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+
+                        <AppBarButton Label="Remove"
+                                      ToolTipService.ToolTip="Remove the selected item"
+                                      ToolTipService.Placement="Bottom"
+                                      IsEnabled="{Binding IsValueSelected}">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons"
+                                          Glyph="&#xE74D;" />
+                            </AppBarButton.Icon>
+                            <AppBarButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Remove"
+                                                    Click="Remove_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xF165;" />
+                                        </MenuFlyoutItem.Icon>
+                                        <MenuFlyoutItem.KeyboardAccelerators>
+                                            <KeyboardAccelerator Modifiers="Control"
+                                                                 Key="R" />
+                                        </MenuFlyoutItem.KeyboardAccelerators>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutSeparator />
+                                    <MenuFlyoutItem Text="Delete"
+                                                    Click="Delete_Click">
+                                        <MenuFlyoutItem.Icon>
+                                            <FontIcon Glyph="&#xE74D;" />
+                                        </MenuFlyoutItem.Icon>
+                                        <MenuFlyoutItem.KeyboardAccelerators>
+                                            <KeyboardAccelerator Key="Delete" />
+                                        </MenuFlyoutItem.KeyboardAccelerators>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+
+                        <AppBarButton Label="Replace"
+                                      ToolTipService.ToolTip="Replace current texture"
+                                      ToolTipService.Placement="Bottom"
+                                      IsEnabled="{Binding IsValueSelected}">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons"
+                                          Glyph="&#xE8BA;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+
+                    </CommandBar.PrimaryCommands>
+
+                    <CommandBar.SecondaryCommands>
+
+                        <AppBarButton Label="Open file location"
+                                      ToolTipService.ToolTip="Open file location"
+                                      ToolTipService.Placement="Top"
+                                      IsEnabled="{Binding IsValueSelected}">
+                            <AppBarButton.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons"
+                                          Glyph="&#xE838;" />
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
+
+            </Grid>
+
+            <labs:GridSplitter Grid.Column="1" />
+
+
+            <Grid BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                  BorderThickness="1,0,0,0"
+                  Grid.Column="2">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="300" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Background="{ThemeResource FilePreviewBackground}"
+                        Grid.Row="0">
+
+                    <Border.BackgroundTransition>
+                        <BrushTransition />
+                    </Border.BackgroundTransition>
+
+                    <Image Source="{x:Bind ViewModel.CurrentTexture.Image, Mode=TwoWay}"
+                           Translation="0,0,12"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="14">
+                        <Image.Shadow>
+                            <ThemeShadow />
+                        </Image.Shadow>
+                    </Image>
+                </Border>
+
+                <StackPanel Background="{ThemeResource PaneMainBackground}"
+                            Orientation="Vertical"
+                            Padding="20"
+                            Grid.Row="1">
+
+                    <StackPanel.BackgroundTransition>
+                        <BrushTransition />
+                    </StackPanel.BackgroundTransition>
+
+                    <TextBlock FontWeight="SemiBold"
+                               FontSize="16"
+                               TextWrapping="Wrap"
+                               Text="{Binding CurrentTexture,Mode=TwoWay}"
+                               IsTextSelectionEnabled="True" />
+
+                    <Border Height="8" />
+
+                    <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               IsTextSelectionEnabled="True">
+                        <Run Text="Dimensions:" />
+                        <Run Text="{Binding CurrentTexture.StrSize,Mode=TwoWay}" />
+                    </TextBlock>
+
+                    <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               Text="Size:"
+                               IsTextSelectionEnabled="True" />
+
+                    <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               Text="Format:"
+                               IsTextSelectionEnabled="True" />
+
+                    <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               IsTextSelectionEnabled="True">
+                        <Run Text="File location:" />
+                        <Run Text="{Binding CurrentTexture,Mode=TwoWay}" />
+                    </TextBlock>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
+        <Grid x:Name="rootGrids"
+              x:Load="False">
+
+            <Grid x:Name="AppaTitleBar"
+                  Margin="48,0,0,0"
+                  Padding="5,3,0,0"
+                  Height="44"
+                  Canvas.ZIndex="2"
+                  VerticalAlignment="Top">
+                <TextBlock x:Name="AppTitleTextBlock"
+                           Style="{StaticResource CaptionTextBlockStyle}"
+                           Text="{x:Bind MainViewModel.FileNameString,Mode=OneWay}"
+                           VerticalAlignment="Center" />
+            </Grid>
+
+            <NavigationView x:Name="NavigationView"
+                            MenuItemsSource="{x:Bind ViewModel.Textures}"
+                            SelectedItem="{Binding SelectedValue, Mode=TwoWay}"
+                            IsSettingsVisible="False"
+                            IsBackButtonVisible="Collapsed"
+                            PaneDisplayMode="Auto"
+                            OpenPaneLength="240"
+                            ExpandedModeThresholdWidth="550"
+                            CompactModeThresholdWidth="0"
+                            IsTitleBarAutoPaddingEnabled="True">
+                <NavigationView.Resources>
+                    <Thickness x:Key="NavigationViewContentMargin">0,44,0,0</Thickness>
+                </NavigationView.Resources>
+                <NavigationView.MenuItemTemplate>
+                    <DataTemplate>
+                        <NavigationViewItem Icon="Document"
+                                            Content="{Binding}" />
+                    </DataTemplate>
+                </NavigationView.MenuItemTemplate>
+                <Grid Grid.Column="1">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid BorderBrush="{ThemeResource CardStrokeColorDefault}"
+                          BorderThickness="0,0,0,1"
+                          Padding="16,0,0,0"
+                          Grid.Row="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="192"
+                                              Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{x:Bind ViewModel.CurrentTexture.StrSize,Mode=OneWay}"
+                                   Style="{StaticResource BodyStrongTextBlockStyle}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   CharacterSpacing="0" />
+
+                        <CommandBar Grid.Column="1"
+                                    IsOpen="False"
+                                    DefaultLabelPosition="Right"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    IsSticky="False">
+                            <CommandBar.PrimaryCommands>
+                                <AppBarButton Label="Add"
+                                              ToolTipService.ToolTip="Add a new texture"
+                                              ToolTipService.Placement="Top"
+                                              Click="Add_Click">
+                                    <AppBarButton.Icon>
+                                        <FontIcon FontFamily="Segoe Fluent Icons"
+                                                  Glyph="" />
+                                    </AppBarButton.Icon>
+                                </AppBarButton>
+                                <AppBarButton Label="Remove"
+                                              ToolTipService.ToolTip="Remove the selected item"
+                                              ToolTipService.Placement="Bottom"
+                                              IsEnabled="{Binding IsValueSelected}">
+                                    <AppBarButton.Icon>
+                                        <FontIcon FontFamily="Segoe Fluent Icons"
+                                                  Glyph="&#xe74d;" />
+                                    </AppBarButton.Icon>
+                                    <AppBarButton.Flyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Remove"
+                                                            Click="Remove_Click">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xe738;" />
+                                                </MenuFlyoutItem.Icon>
+                                                <MenuFlyoutItem.KeyboardAccelerators>
+                                                    <KeyboardAccelerator Modifiers="Control"
+                                                                         Key="R" />
+                                                </MenuFlyoutItem.KeyboardAccelerators>
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="Delete"
+                                                            Click="Delete_Click">
+                                                <MenuFlyoutItem.Icon>
+                                                    <FontIcon Glyph="&#xe74d;" />
+                                                </MenuFlyoutItem.Icon>
+                                                <MenuFlyoutItem.KeyboardAccelerators>
+                                                    <KeyboardAccelerator Key="Delete" />
+                                                </MenuFlyoutItem.KeyboardAccelerators>
+                                            </MenuFlyoutItem>
+                                        </MenuFlyout>
+                                    </AppBarButton.Flyout>
+                                </AppBarButton>
+                                <AppBarButton Label="Replace"
+                                              ToolTipService.ToolTip="Replace current texture"
+                                              ToolTipService.Placement="Bottom"
+                                              IsEnabled="{Binding IsValueSelected}">
+                                    <AppBarButton.Icon>
+                                        <FontIcon FontFamily="Segoe Fluent Icons"
+                                                  Glyph="&#xe895;" />
+                                    </AppBarButton.Icon>
+                                </AppBarButton>
+
+                            </CommandBar.PrimaryCommands>
+                            <CommandBar.SecondaryCommands>
+                                <AppBarButton Label="Open file location"
+                                              ToolTipService.ToolTip="Open file location"
+                                              ToolTipService.Placement="Top"
+                                              IsEnabled="{Binding IsValueSelected}">
+                                    <AppBarButton.Icon>
+                                        <FontIcon FontFamily="Segoe Fluent Icons"
+                                                  Glyph="&#xE838;" />
+                                    </AppBarButton.Icon>
+                                </AppBarButton>
+                            </CommandBar.SecondaryCommands>
+                        </CommandBar>
+
+                    </Grid>
+
+                    <Grid Padding="12"
+                          Grid.Row="1">
+                        <Grid.BackgroundTransition>
+                            <BrushTransition />
+                        </Grid.BackgroundTransition>
+                        <ScrollViewer ZoomMode="Enabled"
+                                      MinZoomFactor="0.5"
+                                      MaxZoomFactor="2"
+                                      HorizontalScrollMode="Disabled"
+                                      VerticalScrollMode="Disabled">
+                            <Image Source="{x:Bind ViewModel.CurrentTexture.Image, Mode=TwoWay}"
+                                   Translation="0,0,44">
+                                <Image.Shadow>
+                                    <ThemeShadow />
+                                </Image.Shadow>
+                            </Image>
+                        </ScrollViewer>
+                    </Grid>
+
+                </Grid>
+            </NavigationView>
+
+
+
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,20 @@
+<UserControl x:Class="RSDK.AnimationEditor.Experimental.Content.Resources.Icons.Delete"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:RSDK.AnimationEditor.Experimental.Content.Resources.Icons"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Viewbox Stretch="Uniform">
+        <Canvas Height="16"
+                Width="16">
+            <Path Fill="{ThemeResource IconFill}"
+                  Data="M14 2.5H2l1.347 11.672a1.5 1.5 0 0 0 1.49 1.328h6.326a1.5 1.5 0 0 0 1.49-1.328L14 2.5Z" />
+            <Path Fill="{ThemeResource IconBackgroundFill}"
+                  Data="M15 2a.5.5 0 0 1 0 1h-.554L13.15 14.23A2 2 0 0 1 11.163 16H4.837a2 2 0 0 1-1.987-1.77L1.553 3H1a.5.5 0 0 1-.492-.41L.5 2.5A.5.5 0 0 1 1 2h14Zm-1.562 1H2.561l1.283 11.115a1 1 0 0 0 .993.885h6.326a1 1 0 0 0 .993-.885L13.438 3Z" />
+            <Path Fill="{ThemeResource IconBackgroundFill}"
+                  Data="M8 1a1.5 1.5 0 0 0-1.5 1.5h-1a2.5 2.5 0 0 1 5 0h-1A1.5 1.5 0 0 0 8 1ZM6.5 6a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5Zm3 0a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5Z" />
+        </Canvas>
+    </Viewbox>
+</UserControl>

@@ -1,0 +1,28 @@
+<ContentDialog
+    x:Class="RSDK.AnimationEditor.Experimental.Content.Views.Other.NewFileDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RSDK.AnimationEditor.Experimental.Content.Views.Other"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource DefaultContentDialogStyle}"
+    Title="Which version will your animation target?"
+    PrimaryButtonText="Continue"
+    IsPrimaryButtonEnabled="False"
+    CloseButtonText="Cancel"
+    PrimaryButtonStyle="{StaticResource AccentButtonStyle}">
+
+    <Grid>
+
+        <Grid x:Name="VersionSelection">
+            <ListView x:Name="vs"
+                      Margin="-4,0" 
+                      SelectionChanged="vs_selected">
+                <ListViewItem Content="RSDKv3/4 - .ani"/>
+                <ListViewItem Content="RSDKv5 - .bin"/>
+            </ListView>
+        </Grid>
+
+    </Grid>
+</ContentDialog>

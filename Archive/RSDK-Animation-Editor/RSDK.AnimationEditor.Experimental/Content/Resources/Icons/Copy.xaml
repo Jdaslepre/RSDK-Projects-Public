@@ -1,0 +1,22 @@
+<UserControl x:Class="RSDK.AnimationEditor.Experimental.Content.Resources.Icons.Copy"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:RSDK.AnimationEditor.Experimental.Content.Resources.Icons"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Viewbox Stretch="Uniform">
+        <Canvas Height="16"
+                Width="16">
+            <Path Fill="{ThemeResource IconFill}"
+                  Data="M5 4.5H3.5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h4A2 2 0 0 0 9.437 13H8a3 3 0 0 1-3-3V4.5Z" />
+            <Path Fill="{ThemeResource IconBackgroundFill}"
+                  Data="M5 4H3.5A2.5 2.5 0 0 0 1 6.5v6A2.5 2.5 0 0 0 3.5 15h4a2.5 2.5 0 0 0 2.45-2H8.915A1.5 1.5 0 0 1 7.5 14h-4A1.5 1.5 0 0 1 2 12.5v-6A1.5 1.5 0 0 1 3.5 5H5V4Z" />
+            <Path Fill="{ThemeResource IconFill}"
+                  Data="M6.5 9.5v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2Z" />
+            <Path Fill="{ThemeResource AccentFillColorDefaultBrush}"
+                  Data="M8.5 2A1.5 1.5 0 0 0 7 3.5v6A1.5 1.5 0 0 0 8.5 11h4A1.5 1.5 0 0 0 14 9.5v-6A1.5 1.5 0 0 0 12.5 2h-4ZM6 3.5A2.5 2.5 0 0 1 8.5 1h4A2.5 2.5 0 0 1 15 3.5v6a2.5 2.5 0 0 1-2.5 2.5h-4A2.5 2.5 0 0 1 6 9.5v-6Z" />
+        </Canvas>
+    </Viewbox>
+</UserControl>
