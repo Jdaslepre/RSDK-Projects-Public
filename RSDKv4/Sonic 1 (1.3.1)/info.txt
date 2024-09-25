@@ -1,5 +1,0 @@
-Breakable Bombs 		- Allows Bomb badniks to be broken from the top.
-Mighty in Sonic 1 2013		- Adds Mighty the Armadillo to the game, as an extra slot character.
-More Character Pairs		- Allows Tails to have a sidekick, and for the sidekick to be any character.
-Proper Level Select Text 	- Adds proper capitalization to the Level Select.
-S2 Animated Sonic		- Gives Sonic his Sonic 2 animations while keeping his Sonic 1 colors and eyes.
