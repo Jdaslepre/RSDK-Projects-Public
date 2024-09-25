@@ -1,2 +1,0 @@
-Marker Monitors 		- Replaces Lamp Posts with their equivalents from the 8-bit version of Sonic the Hedgehog.
-Standardized Stage Select	- Replaces Sonic CD's unintuitive stage select with a Sonic 2 styled one.
