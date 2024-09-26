@@ -6,6 +6,13 @@ namespace GameLogic
 
 struct PauseMenu : RSDK::GameObject::Entity {
 
+    enum Buttons {
+        MenuUnselected = -1,
+        ButtonContinue,
+        ButtonRestart,
+        ButtonExit = 3,
+    };
+
     // ----------------
     // Static Variables
     // ----------------
@@ -34,15 +41,18 @@ struct PauseMenu : RSDK::GameObject::Entity {
     RSDK::Vector2 drawPos;
     RSDK::Vector2 pauseBarPos;
 
+    bool32 physicalControls;
+
     int32 timer;
-    int32 backgroundAlpha;
-    int32 spritePosX;
-    int32 selectedButton;
+    uint8 backgroundAlpha;
+    int32 lineX;
+
+    uint8 selectedIndex;
+
     bool32 disableRestart;
     uint8 triggerPlayer;
     int32 timerThreshold;
     int32 pauseBarHeight;
-
 
     //
     int32 up;
@@ -73,6 +83,7 @@ struct PauseMenu : RSDK::GameObject::Entity {
     void StopSound();
 
     void Action_Accept();
+    void Action_TouchButton(int32 buttonIndex, int32 y);
 
     // -------------
     // Object States

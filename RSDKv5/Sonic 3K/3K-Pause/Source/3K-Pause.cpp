@@ -7,9 +7,9 @@ ModConfig config;
 using namespace RSDK;
 using namespace GameLogic;
 
+#if RETRO_USE_MOD_LOADER && GAME_CUSTOMLINKLOGIC
 void CheckTouchEnabledCB(void *);
 
-#if RETRO_USE_MOD_LOADER && GAME_CUSTOMLINKLOGIC
 void LinkGameLogic(RSDK::EngineInfo *info)
 {
     // ---------------------
