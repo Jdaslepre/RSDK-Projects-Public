@@ -1,3 +1,6 @@
 [submodule "RSDKv5/GameAPI"]
 	path = RSDKv5/GameAPI
 	url = https://github.com/RSDKModding/RSDKv5-GameAPI
+[submodule "RSDKv5/Sonic Mania/RSDK-Online/dependencies/asio"]
+	path = RSDKv5/Sonic Mania/RSDK-Online/dependencies/asio
+	url = https://github.com/chriskohlhoff/asio
