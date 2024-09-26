@@ -9,7 +9,6 @@
 
 struct ModConfig {
     bool32 hasTouchControls;
-    bool32 forceTouchControls;
 };
 
 extern ModConfig config;
@@ -337,6 +336,8 @@ enum HUDEnableTypes {
 // ------------------
 // 3K-Pause Mod Logic
 // ------------------
+
+#include "3K-Touch.hpp"
 
 namespace GameLogic
 {

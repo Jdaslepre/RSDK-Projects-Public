@@ -13,6 +13,9 @@
     <ClCompile Include="Objects\Player.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="3K-Touch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\Game.hpp">
@@ -35,6 +38,9 @@
     </ClInclude>
     <ClInclude Include="Objects\Player.hpp">
       <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="3K-Touch.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

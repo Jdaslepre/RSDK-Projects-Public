@@ -143,7 +143,7 @@ void HUD::DrawMobile(void)
             drawPos.x -= 0x80000;
 
             // Draw Minutes
-            HUD_DrawNumbersBase10(&this->numbersAnimator, &lifePos, 9, 1);
+            HUD_DrawNumbersBase10(&this->numbersAnimator, &drawPos, 9, 1);
         }
         else {
             // Draw Seconds
@@ -317,8 +317,10 @@ void HUD::DrawMobile(void)
                 case GAME_S3:
                 case GAME_SK:
                     this->lifeNamesAnimator.DrawSprite(&drawPos, true);
-                    this->hudElementsAnimator.frameID = 14; // X
+
+                    this->hudElementsAnimator.frameID = 14;
                     this->hudElementsAnimator.DrawSprite(&drawPos, true);
+
                     drawPos.x += 0x290000;
                     HUD_DrawNumbersBase10(&this->lifeNumbersAnimator, &drawPos, lives, 0);
                     break;

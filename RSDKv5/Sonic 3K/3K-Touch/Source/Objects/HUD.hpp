@@ -1,5 +1,5 @@
 #pragma once
-#include "GameAPI/Game.hpp"
+#include "..\3KTC.hpp"
 
 namespace GameLogic {
 

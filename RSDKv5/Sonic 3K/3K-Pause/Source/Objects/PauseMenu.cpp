@@ -83,7 +83,6 @@ void PauseMenu::Create(void *data)
     }
 
     backgroundAlpha = 74;
-    physicalInput   = config.hasTouchControls | config.forceTouchControls;
 
     if (!sceneInfo->inEditor) {
         active = ACTIVE_ALWAYS;
@@ -165,6 +164,17 @@ void PauseMenu::StopSound()
     }
 }
 
+void PauseMenu::Action_Accept()
+{
+    modSVars->sfxAccept.Play();
+
+    state.Set(&PauseMenu::State_Confirmed);
+    stateDraw.Set(&PauseMenu::Draw_Confirmed);
+
+    alpha = 0xF8;
+    timer = 0;
+}
+
 // Object States
 void PauseMenu::State_StartPause()
 {
@@ -194,7 +204,7 @@ void PauseMenu::State_StartPause()
     else
         disableRestart = false;
 
-    if (config.hasTouchControls || config.forceTouchControls)
+    if (config.hasTouchControls)
         selectedButton = -1;
 
     state.Set(&PauseMenu::State_SlideIn);
@@ -236,7 +246,7 @@ void PauseMenu::State_Controls()
 {
     SET_CURRENT_STATE();
 
-    if (!physicalInput) {
+    if (!config.hasTouchControls) {
         if (up || down) {
             timer      = 0;
             spritePosX = screenInfo->size.x;
@@ -262,34 +272,17 @@ void PauseMenu::State_Controls()
         }
 
         if (start) {
-            modSVars->sfxAccept.Play();
-
-            state.Set(&PauseMenu::State_Confirmed);
-            stateDraw.Set(&PauseMenu::Draw_Confirmed);
-            alpha = 0xF8;
-            timer = 0;
+            Action_Accept();
         }
-
-        /*
-        if (TouchHelpers_CheckAnyTouch() >= 0) {
-            physicalInput  = false;
-            selectedButton = -1;
-        }
-        */
     }
     else {
-        /*
-        if (TouchHelpers_CheckTouchRect(spritePosX, 32, screenInfo->size.x, 64, nullptr, nullptr) >= 0) {
+        if (Touch::CheckRect(spritePosX, 32, screenInfo->size.x, 64, nullptr, nullptr) >= 0) {
             selectedButton = 0;
         }
         else {
-            if (TouchHelpers_CheckAnyTouch() < 0) {
+            if (CheckAnyTouch() < 0) {
                 if (selectedButton == 0) {
-                    RSDK.PlaySfx(ModPauseMenu->sfxAccept, false, 255);
-                    state     = PauseMenu_State_Confirmed;
-                    stateDraw = PauseMenu_Draw_Confirmed;
-                    alpha     = 248;
-                    timer     = 0;
+                    Action_Accept();
                 }
                 else {
                     if (selectedButton == 0)
@@ -300,17 +293,13 @@ void PauseMenu::State_Controls()
 
         // Restart
         if (!disableRestart) {
-            if (TouchHelpers_CheckTouchRect(spritePosX, 80, ScreenInfo->size.x, 112, NULL, NULL) >= 0) {
+            if (Touch::CheckRect(spritePosX, 80, screenInfo->size.x, 112, nullptr, nullptr) >= 0) {
                 selectedButton = 1;
             }
             else {
-                if (TouchHelpers_CheckAnyTouch() < 0) {
+                if (CheckAnyTouch() < 0) {
                     if (selectedButton == 1) {
-                        RSDK.PlaySfx(ModPauseMenu->sfxAccept, false, 255);
-                        state     = PauseMenu_State_Confirmed;
-                        stateDraw = PauseMenu_Draw_Confirmed;
-                        alpha     = 248;
-                        timer     = 0;
+                        Action_Accept();
                     }
                     else {
                         if (selectedButton == 1)
@@ -321,17 +310,13 @@ void PauseMenu::State_Controls()
         }
 
         // Options
-        if (TouchHelpers_CheckTouchRect(spritePosX, 128, ScreenInfo->size.x, 160, NULL, NULL) >= 0) {
+        if (Touch::CheckRect(spritePosX, 128, screenInfo->size.x, 160, nullptr, nullptr) >= 0) {
             selectedButton = 2;
         }
         else {
-            if (TouchHelpers_CheckAnyTouch() < 0) {
+            if (CheckAnyTouch() < 0) {
                 if (selectedButton == 2) {
-                    RSDK.PlaySfx(ModPauseMenu->sfxAccept, false, 255);
-                    state     = PauseMenu_State_Confirmed;
-                    stateDraw = PauseMenu_Draw_Confirmed;
-                    alpha     = 248;
-                    timer     = 0;
+                    Action_Accept();
                 }
             }
             else {
@@ -341,17 +326,13 @@ void PauseMenu::State_Controls()
         }
 
         // Exit
-        if (TouchHelpers_CheckTouchRect(spritePosX, 176, ScreenInfo->size.x, 208, NULL, NULL) >= 0) {
+        if (Touch::CheckRect(spritePosX, 176, screenInfo->size.x, 208, nullptr, nullptr) >= 0) {
             selectedButton = 3;
         }
         else {
-            if (TouchHelpers_CheckAnyTouch() < 0) {
+            if (CheckAnyTouch() < 0) {
                 if (selectedButton == 3) {
-                    RSDK.PlaySfx(ModPauseMenu->sfxAccept, false, 255);
-                    state     = PauseMenu_State_Confirmed;
-                    stateDraw = PauseMenu_Draw_Confirmed;
-                    alpha     = 248;
-                    timer     = 0;
+                    Action_Accept();
                 }
             }
             else {
@@ -362,17 +343,14 @@ void PauseMenu::State_Controls()
 
         if (up) {
             selectedButton = 3;
-            physicalInput  = true;
         }
 
         if (down) {
             selectedButton = 0;
-            physicalInput  = true;
         }
 
         if (timer < 60)
             timer++;
-            */
     }
 }
 

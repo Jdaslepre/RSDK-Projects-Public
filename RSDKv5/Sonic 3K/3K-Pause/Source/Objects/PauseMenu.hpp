@@ -42,7 +42,7 @@ struct PauseMenu : RSDK::GameObject::Entity {
     uint8 triggerPlayer;
     int32 timerThreshold;
     int32 pauseBarHeight;
-    int32 physicalInput;
+
 
     //
     int32 up;
@@ -71,6 +71,8 @@ struct PauseMenu : RSDK::GameObject::Entity {
     void PauseSound();
     void ResumeSound();
     void StopSound();
+
+    void Action_Accept();
 
     // -------------
     // Object States

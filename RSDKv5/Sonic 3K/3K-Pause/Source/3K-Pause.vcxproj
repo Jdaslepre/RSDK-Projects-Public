@@ -174,6 +174,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3K-Pause.cpp" />
+    <ClCompile Include="3K-Touch.cpp" />
     <ClCompile Include="Objects\PauseMenu.cpp" />
     <ClCompile Include="Objects\Player.cpp" />
     <ClCompile Include="RSDK-Impl.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameObjects.hpp" />
     <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameVariables.hpp" />
     <ClInclude Include="3K-Pause.hpp" />
+    <ClInclude Include="3K-Touch.hpp" />
     <ClInclude Include="Objects\PauseMenu.hpp" />
     <ClInclude Include="Objects\Player.hpp" />
     <ClInclude Include="RSDK-Impl.hpp" />

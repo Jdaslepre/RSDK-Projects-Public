@@ -305,6 +305,11 @@ inline static auto PubFunc(const char *functionName) { return (void (*)(void))Mo
 template <typename T> inline static T PubFunc(const char *id, const char *functionName) { return (T)Mod::GetPublicFunction(id, functionName); }
 template <typename T> inline static T PubFunc(const char *functionName) { return (T)Mod::GetPublicFunction(NULL, functionName); }
 
+template <typename NS, typename Type> inline static void AddPublicFunction(const char *functionName, Type(NS::*functionPtr))
+{
+    modTable->AddPublicFunction(functionName, reinterpret_cast<void *&>(functionPtr));
+}
+
 // Using T::SomeFunction as a state
 template <typename T, typename X> inline void StateHook(T(X::*state), bool32 (*hook)(bool32 skippedState), bool32 priority)
 {
@@ -326,6 +331,8 @@ template <typename T, typename X> inline void StateHook(RSDK::Action<T> &state, 
 // Gets a function via pointer's name - and assigns the result to said pointer
 #define PubFuncAuto(id, ptr) ptr = (decltype(ptr))Mod::GetPublicFunction(id, #ptr)
 
+#define ADD_PUBLIC_FUNC(func) Mod::AddPublicFunction(#func, &func)
+
 #define ManiaStateMachine(name) void (*name)(void)
 #define Type_StateMachine       void (*)(void)
 
@@ -340,9 +347,9 @@ enum HUDEnableTypes {
 
 #define GET_STOCK_ID(stockNum) (((globals->stock >> (8 * ((stockNum)-1))) & 0xFF))
 
-// --------------
-// 3KTC Mod Logic
-// --------------
+// ------------------
+// 3K-Touch Mod Logic
+// ------------------
 
 namespace GameLogic
 {

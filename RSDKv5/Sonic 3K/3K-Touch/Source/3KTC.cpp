@@ -42,6 +42,7 @@ void LinkGameLogic(RSDK::EngineInfo *info)
     PubFuncAssign(HUD_DrawNumbersBase10, NULL, "HUD::DrawNumbersBase10");
     PubFuncAssign(HUD_DrawNumbersBase16, NULL, "HUD::DrawNumbersBase16");
     PubFuncAssign(HUD_CharacterIndexFromID, NULL, "HUD::CharacterIndexFromID");
+    PubFuncAssign(Player_CheckValidState, NULL, "Player::CheckValidState");
 
     config.usePathTracer = static_cast<bool *>(Mod::GetPublicFunction(0, "usePathTracer"));
 
@@ -52,6 +53,10 @@ void LinkGameLogic(RSDK::EngineInfo *info)
     // Add a variable that allows other mods to detect if touch controls are enabled
     // this should be fine to do i think...
     Mod::AddPublicFunction("useTouchControls", INT_TO_VOID(config.useTouchControls));
+
+    ADD_PUBLIC_FUNC(Touch::CheckRect);
+    ADD_PUBLIC_FUNC(Touch::Control4Dir);
+    ADD_PUBLIC_FUNC(Touch::Control8Dir);
 
     // -----------------
     // Get Object States

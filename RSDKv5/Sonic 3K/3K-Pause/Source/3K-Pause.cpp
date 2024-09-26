@@ -20,18 +20,20 @@ void LinkGameLogic(RSDK::EngineInfo *info)
     // Mod Config Initialization
     // -------------------------
 
-    config.forceTouchControls = Mod::Settings::GetBool(Mod::modID, "Config:Force Touch Controls", false);
-
-    Mod::Settings::SetBool("Config:Force Touch Controls", config.forceTouchControls);
-    Mod::Settings::SaveSettings();
+    Mod::List::LoadModInfo("3K-Touch", NULL, NULL, NULL, &config.hasTouchControls);
 
     // --------------------
     // Get Public Functions
     // --------------------
 
-    //PubFuncAssign(HUD_DrawNumbersBase10, NULL, "HUD::DrawNumbersBase10");
-    //PubFuncAssign(HUD_DrawNumbersBase16, NULL, "HUD::DrawNumbersBase16");
-    //PubFuncAssign(HUD_CharacterIndexFromID, NULL, "HUD::CharacterIndexFromID");
+    // These functions should NEVER be used without checking if hasTouchControls is true
+    PubFuncAssign(Touch::CheckRect, "3K-Touch", "Touch::CheckRect");
+    PubFuncAssign(Touch::Control4Dir, "3K-Touch", "Touch::Control4Dir");
+    PubFuncAssign(Touch::Control8Dir, "3K-Touch", "Touch::Control8Dir");
+
+    // it's 4:06 AM, this works well enough
+    if (!Touch::CheckRect || !Touch::Control4Dir || !Touch::Control8Dir)
+        config.hasTouchControls = false;
 
     // --------------------
     // Set Public Functions
