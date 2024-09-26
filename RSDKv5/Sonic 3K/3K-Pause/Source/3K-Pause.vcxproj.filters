@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="3K-Pause.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RSDK-Impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\PauseMenu.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Player.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\Game.hpp">
+      <Filter>GameAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameObjects.hpp">
+      <Filter>GameAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameVariables.hpp">
+      <Filter>GameAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="3K-Pause.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDK-Impl.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\PauseMenu.hpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Player.hpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameAPI">
+      <UniqueIdentifier>{7c711619-7399-406a-8c34-67909ae6ded8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4ecc9255-25f1-46a0-a757-1adf1d1726a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{6a7c3705-9869-4316-9976-407c5258d3ab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
