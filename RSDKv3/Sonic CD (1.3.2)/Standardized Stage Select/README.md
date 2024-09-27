@@ -3,4 +3,4 @@
 
 Replaces Sonic CD's unintuitive stage select with a Sonic 2 styled one.
 
-![Image of the RSDK Mod!](/Assets/StandardLevelSelectCD.png)
+![Image of the RSDK Mod!](/Assets/RSDKv3-StandardLevelSelect.png)

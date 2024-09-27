@@ -2,3 +2,5 @@
 ## Super Forms Attract Rings
 
 Adds functionality for super forms that causes them to attract rings.
+
+![Showcase of the RSDK Mod!](/Assets/RSDKv4-SuperRingS1.gif)

@@ -1,0 +1,149 @@
+//--------------Sonic Nexus Frog Badnik---------------//
+//----Scripted by Christian Whitehead "The Taxman"----//
+
+#alias Object.Value0 : Object.XVelocity
+#alias Object.Value1 : Object.YVelocity
+#alias Object.Value2 : Object.Bounce
+
+#alias 29 : TYPE_FROG
+
+#alias 9 : ANI_SPINDASH
+#alias 10 : ANI_JUMPING
+#alias 15 : TYPE_EXPLOSION
+#alias 20 : TYPE_INVINCIBLE
+
+//----Player Movement States----//
+#alias 8 : GETTINGHURT
+#alias Object.Value4 : Player.Invincibility
+
+sub ObjectMain
+
+	Object.YVelocity+=12288
+
+	Object.XPos+=Object.XVelocity
+	Object.YPos+=Object.YVelocity
+
+	if Object.YVelocity>=0
+		ObjectTileCollision(0,0,20,0)
+		if CheckResult==1
+			Object.YVelocity=-262144
+			Object.Bounce++
+			if Object.Bounce==4
+				Object.Bounce=0
+				FlipSign(Object.XVelocity)
+			end if
+		end if
+	end if
+
+end sub
+
+sub ObjectPlayerInteraction
+
+	if Object[2].PropertyValue!=0
+		PlayerObjectCollision(C_TOUCH,-8,-15,8,20)
+	else
+		if Object[2].State==0
+			PlayerObjectCollision(C_TOUCH,-8,-15,8,20)
+		else
+			PlayerObjectCollision(C_TOUCH,-32,-39,32,44)
+		end if
+	end if
+	if CheckResult==1
+
+		switch Player.Animation
+		case ANI_SPINDASH
+		case ANI_JUMPING
+			Object.Type=0
+			CreateTempObject(TYPE_EXPLOSION,0,Object.XPos,Object.YPos)
+			Object[TempObjectPos].DrawOrder=4
+			PlaySfx(11,false)
+			if Player.YVelocity>0
+				FlipSign(Player.YVelocity)
+			end if
+			PScore+=100
+			break
+		default
+			ArrayPos0=Player.EntityNo
+			ArrayPos0+=2
+			if Object[ArrayPos0].Type==TYPE_INVINCIBLE
+				Object.Type=0
+				CreateTempObject(TYPE_EXPLOSION,0,Object.XPos,Object.YPos)
+				Object[TempObjectPos].DrawOrder=4
+				PlaySfx(11,false)
+				if Player.YVelocity>0
+					FlipSign(Player.YVelocity)
+				end if
+				PScore+=100
+			else
+				ArrayPos0=Player.EntityNo
+				if Player[ArrayPos0].Invincibility==0
+					Player.State=GETTINGHURT
+					if Player.XPos>Object.XPos
+						Player.Speed=131072
+					else
+						Player.Speed=-131072
+					end if
+				end if
+			end if
+			break
+		end switch
+
+	end if
+
+end sub
+
+sub ObjectDraw
+
+	if Object.XVelocity>0
+		Object.Frame=3
+	else
+		Object.Frame=0
+	end if
+
+	if Object.YVelocity>131072
+		Object.Frame+=2
+	else
+		if Object.YVelocity>32768
+			Object.Frame++
+		end if
+	end if
+
+	if Object.YVelocity<-196608
+		Object.Frame+=2
+	else
+		if Object.YVelocity<-131072
+			Object.Frame++
+		end if
+	end if
+
+	DrawSprite(Object.Frame)
+
+end sub
+
+sub ObjectStartup
+	LoadSpriteSheet("SSZ/Enemies.gif")
+	
+	//Frog Left Frames
+	SpriteFrame(-8,-16,16,53,1,1)
+	SpriteFrame(-8,-16,16,44,18,1)
+	SpriteFrame(-8,-16,16,35,35,1)
+
+	//Frog Right Frames
+	SpriteFrame(-8,-16,16,53,35,37)
+	SpriteFrame(-8,-16,16,44,18,46)
+	SpriteFrame(-8,-16,16,35,1,55)
+
+	ArrayPos0=32
+	while ArrayPos0<1056
+		if Object[ArrayPos0].Type==TYPE_FROG
+			Object[ArrayPos0].XVelocity=-65536
+		end if
+		ArrayPos0++
+	loop
+	
+end sub
+
+sub RSDK
+	LoadSpriteSheet("SSZ/Enemies.gif")
+	SetEditorIcon(Icon0,SingleIcon,-8,-16,16,35,35,1)
+end sub

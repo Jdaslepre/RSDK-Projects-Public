@@ -1,0 +1,148 @@
+//--------------Sonic Nexus Chompy Fish---------------//
+//----Scripted by Christian Whitehead "The Taxman"----//
+
+#alias Object.Value0 : Object.XVelocity
+#alias Object.Value1 : Object.YVelocity
+
+#alias Object.Value2 : Object.OldXPos
+#alias Object.Value3 : Object.OldYPos
+#alias Object.Value4 : Object.Timer
+
+#alias 32 : TYPE_FISH
+
+#alias 9 : ANI_SPINDASH
+#alias 10 : ANI_JUMPING
+#alias 15 : TYPE_EXPLOSION
+#alias 20 : TYPE_INVINCIBLE
+
+//----Player Movement States----//
+#alias 8 : GETTINGHURT
+#alias Object.Value4 : Player.Invincibility
+
+sub ObjectMain
+
+	switch Object.State
+	case 0
+		Object.Timer++
+		if Object.Timer==1
+			Object.Timer=0
+			Object.OldYPos=Object.YPos
+			if Object.PropertyValue==0
+				Object.XVelocity=-131072
+				Object.Rotation=512
+			else
+				Object.XVelocity=131072
+				Object.Rotation=0
+			end if
+			Object.YVelocity=-638976
+			Object.State=1
+			Object.Priority=1
+		end if
+		break
+	case 1
+		Object.XPos+=Object.XVelocity
+		Object.YPos+=Object.YVelocity
+
+		Object.YVelocity+=12288
+
+		if Object.PropertyValue==0
+			Object.Rotation-=3
+		else
+			Object.Rotation+=3
+		end if
+
+		if Object.YVelocity>638976
+			Object.Priority=0
+			Object.State=0
+			Object.YPos=Object.OldYPos
+			if Object.PropertyValue==0
+				Object.PropertyValue=2
+			else
+				Object.PropertyValue=0
+			end if
+		end if
+		break
+	end switch
+
+end sub
+
+sub ObjectPlayerInteraction
+
+	if Object[2].PropertyValue!=0
+		PlayerObjectCollision(C_TOUCH,-14,-14,14,14)
+	else
+		if Object[2].State==0
+			PlayerObjectCollision(C_TOUCH,-14,-14,14,14)
+		else
+			PlayerObjectCollision(C_TOUCH,-38,-38,38,38)
+		end if
+	end if
+	if CheckResult==1
+
+		switch Player.Animation
+		case ANI_SPINDASH
+		case ANI_JUMPING
+			Object.Type=0
+			CreateTempObject(TYPE_EXPLOSION,0,Object.XPos,Object.YPos)
+			Object[TempObjectPos].DrawOrder=4
+			PlaySfx(11,false)
+			if Player.YVelocity>0
+				FlipSign(Player.YVelocity)
+			end if
+			PScore+=100
+			break
+		default
+			ArrayPos0=Player.EntityNo
+			ArrayPos0+=2
+			if Object[ArrayPos0].Type==TYPE_INVINCIBLE
+				Object.Type=0
+				CreateTempObject(TYPE_EXPLOSION,0,Object.XPos,Object.YPos)
+				Object[TempObjectPos].DrawOrder=4
+				PlaySfx(11,false)
+				if Player.YVelocity>0
+					FlipSign(Player.YVelocity)
+				end if
+				PScore+=100
+			else
+				ArrayPos0=Player.EntityNo
+				if Player[ArrayPos0].Invincibility==0
+					Player.State=GETTINGHURT
+					if Player.XPos>Object.XPos
+						Player.Speed=131072
+					else
+						Player.Speed=-131072
+					end if
+				end if
+			end if
+			break
+		end switch
+
+	end if
+
+end sub
+
+sub ObjectDraw
+
+	TempValue0=Object.Frame
+	TempValue0>>=3
+	DrawSpriteFX(TempValue0,FX_ROTATE,Object.XPos,Object.YPos)
+	Object.Frame++
+
+	if Object.Frame>15
+		Object.Frame=0
+	end if
+
+end sub
+
+sub ObjectStartup
+	LoadSpriteSheet("SSZ/Enemies.gif")
+	
+	//Fish Frames
+	SpriteFrame(-16,-16,32,32,1,91)
+	SpriteFrame(-16,-16,32,31,34,91)
+end sub
+
+sub RSDK
+	LoadSpriteSheet("SSZ/Enemies.gif")
+	SetEditorIcon(Icon0,SingleIcon,-16,-16,32,32,1,91)
+end sub

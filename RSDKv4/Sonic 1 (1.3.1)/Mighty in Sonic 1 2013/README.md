@@ -2,3 +2,5 @@
 ## Mighty in Sonic 1 2013
 
 Adds Mighty the Armadillo to the game, as an extra slot character.
+
+![Showcase of the RSDK Mod!](/Assets/RSDKv4-ExtraSlotMighty.gif)

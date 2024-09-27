@@ -2,3 +2,5 @@
 ## More Character Pairs
 
 Allows Tails to have a sidekick, and for the sidekick to be any character.
+
+![Image of the RSDK Mod!](/Assets/RSDKv4-MoreCharacterPairsS1.png)

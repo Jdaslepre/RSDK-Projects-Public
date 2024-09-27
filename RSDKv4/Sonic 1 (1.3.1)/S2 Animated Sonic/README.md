@@ -2,3 +2,5 @@
 ## S2 Animated Sonic
 
 Gives Sonic his Sonic 2 animations while keeping his Sonic 1 colors and eyes.
+
+![Image of the RSDK Mod!](/Assets/RSDKv4-S2Sonic.png)

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <palette />
+  <objects />
+  <variables>
+    <variable name="stage.player2ListPos" value="0" />
+  </variables>
+  <sounds />
+  <players>
+    <player name="SONIC AND KNUCKLES" />
+    <player name="SONIC AND SONIC" />
+    <player name="TAILS AND SONIC" />
+    <player name="TAILS AND TAILS" />
+    <player name="TAILS AND KNUCKLES" />
+    <player name="KNUCKLES AND SONIC" />
+    <player name="KNUCKLES AND TAILS" />
+    <player name="KNUCKLES AND KNUCKLES" />
+  </players>
+  <presentationStages />
+  <regularStages />
+  <specialStages />
+  <bonusStages />
+</game>

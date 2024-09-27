@@ -1,0 +1,138 @@
+//------------Sonic Nexus SSZ Palette Rotate----------//
+//----Scripted by Christian Whitehead "The Taxman"----//
+
+#alias 22 : TYPE_PALROTATE
+
+#alias Object[0].Value4 : Player.Invincibility
+
+#alias 12 : ANI_HURT
+
+sub ObjectMain
+	
+	Object.Value0++
+	if Object.Value0==4
+		Object.Value0=0
+		RotatePalette(128,131,1)
+	end if
+	
+	if Object[2].Type!=25
+		if Object[2].Type!=20
+			TempValue0=Player.EntityNo
+			TempValue0+=2
+			ResetObjectEntity(TempValue0,0,0,0)
+			Object[2].Type=25
+			Object[2].PropertyValue=0
+			Object[2].Priority=1
+			Object[2].DrawOrder=4
+			Object[2].InkEffect=1
+			Object[2].XPos=Player.XPos
+			Object[2].YPos=Player.YPos
+		else
+			LoadPalette("Data/Palettes/BShieldTint.act",80,96)
+			SetBlendTable(128,1,16,80)
+			Object[2].Type=20
+			Object[2].Priority=1
+			Object[2].DrawOrder=4
+			Object[2].XPos=Player.XPos
+			Object[2].YPos=Player.YPos
+		end if
+	end if
+
+	if Player.Invincibility==0
+		if Object[2].Type==20
+
+			LoadPalette("Data/Palettes/BShieldTint.act",80,96)
+			SetBlendTable(128,1,16,80)
+
+			//Did the Player have a shield beforehand?
+			switch Object[2].PropertyValue
+			case 0
+				TempValue0=Player.EntityNo
+				TempValue0+=2
+				ResetObjectEntity(TempValue0,0,0,0)
+				Object[2].Type=25
+				Object[2].PropertyValue=0
+				Object[2].Priority=1
+				Object[2].DrawOrder=4
+				Object[2].InkEffect=1
+				Object[2].XPos=Player.XPos
+				Object[2].YPos=Player.YPos
+				break
+			case 1
+				TempValue0=Player.EntityNo
+				TempValue0+=2
+				ResetObjectEntity(TempValue0,0,0,0)
+				LoadPalette("Data/Palettes/BShieldTint.act",80,96)
+				SetBlendTable(128,1,16,80)
+				Object[2].Type=25
+				Object[2].PropertyValue=1
+				Object[2].Priority=1
+				Object[2].DrawOrder=4
+				Object[2].InkEffect=1
+				Object[2].XPos=Player.XPos
+				Object[2].YPos=Player.YPos
+				break
+			case 2
+				TempValue0=Player.EntityNo
+				TempValue0+=2
+				ResetObjectEntity(TempValue0,0,0,0)
+				Object[2].Type=25
+				Object[2].PropertyValue=2
+				Object[2].Priority=1
+				Object[2].DrawOrder=4
+				Object[2].InkEffect=1
+				Object[2].XPos=Player.XPos
+				Object[2].YPos=Player.YPos
+				break
+			case 3
+				TempValue0=Player.EntityNo
+				TempValue0+=2
+				ResetObjectEntity(TempValue0,0,0,0)
+				Object[2].Type=25
+				Object[2].PropertyValue=3
+				Object[2].Priority=1
+				Object[2].DrawOrder=4
+				Object[2].InkEffect=1
+				Object[2].XPos=Player.XPos
+				Object[2].YPos=Player.YPos
+				break
+			case 4
+				TempValue0=Player.EntityNo
+				TempValue0+=2
+				ResetObjectEntity(TempValue0,0,0,0)
+				Object[2].Type=25
+				Object[2].PropertyValue=4
+				Object[2].Priority=1
+				Object[2].DrawOrder=4
+				Object[2].InkEffect=1
+				Object[2].XPos=Player.XPos
+				Object[2].YPos=Player.YPos
+				break
+			end switch
+
+		end if
+	end if
+end sub
+
+sub ObjectStartup
+	
+	//Initialise any instances of the object
+	
+	ArrayPos0=32
+	while ArrayPos0<1056
+		if Object[ArrayPos0].Type==TYPE_PALROTATE
+			Object[ArrayPos0].Priority=1
+		end if
+		ArrayPos0++
+	loop
+
+	//Set the music track for this Stage
+	//(I know, Random place to do it, but it saves making a new object)
+	SetMusicTrack("Nexus/SunsetShore.ogg",0,true)
+	
+end sub
+
+sub RSDK
+	LoadSpriteSheet("NexusGlobals/Display.gif")
+	SetEditorIcon(Icon0,SingleIcon,-16,-16,32,32,256,221)
+end sub

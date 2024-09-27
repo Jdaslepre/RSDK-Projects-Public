@@ -1,0 +1,775 @@
+//----------------Sonic Player Script-----------------//
+//----Scripted by Christian Whitehead "The Taxman"----//
+
+//----Player Directions----//
+#alias 1 : FACING_LEFT
+#alias 0 : FACING_RIGHT
+
+//----Player Movement States----//
+#alias 0 : NORMAL_GROUND_MOVEMENT
+#alias 1 : AIR_MOVEMENT
+#alias 2 : ROLLING
+#alias 3 : ROLLING_JUMP
+#alias 4 : LOOKING_UP
+#alias 5 : LOOKING_DOWN
+#alias 6 : SPINDASH
+#alias 7 : PEELOUT
+#alias 8 : GETTING_HURT
+#alias 9 : HURT_RECOIL
+#alias 10 : DYING
+#alias 11 : DROWNING
+#alias 12 : HANGING
+#alias 13 : CORKSCREW_RUN
+#alias 14 : CORKSCREW_ROLL
+#alias 15 : TUBE_ROLLING
+
+//----Player Object Variables----//
+#alias Object.Value0 : Player.Rings
+#alias Object.Value1 : Player.SpinDash
+#alias Object.Value2 : Player.AniJumpSpeed
+#alias Object.Value3 : Player.SpeedShoes
+#alias Object.Value4 : Player.Invincibility
+#alias Object.Value5 : Player.Flashing
+#alias Object.Value6 : Player.MinRollSpeed
+
+//----Player Animations----//
+#alias 0 : ANI_STOPPED
+#alias 1 : ANI_WAITING
+#alias 2 : ANI_BORED
+#alias 3 : ANI_LOOKINGUP
+#alias 4 : ANI_LOOKINGDOWN
+#alias 5 : ANI_WALKING
+#alias 6 : ANI_RUNNING
+#alias 7 : ANI_SKIDDING
+#alias 8 : ANI_PEELOUT
+#alias 9 : ANI_SPINDASH
+#alias 10 : ANI_JUMPING
+#alias 11 : ANI_BOUNCING
+#alias 12 : ANI_HURT
+#alias 13 : ANI_DYING
+#alias 14 : ANI_DROWNING
+#alias 15 : ANI_LIFEICON
+#alias 16 : ANI_FANROTATE
+#alias 17 : ANI_BREATHING
+#alias 18 : ANI_PUSHING
+#alias 19 : ANI_FLAILINGLEFT
+#alias 20 : ANI_FLAILINGRIGHT
+
+//----Stuff That's Processed once a frame reguardless of Player.State----//
+sub PlayerMain
+
+	if Player.SpeedShoes>0
+		Player.SpeedShoes--
+		if Player.SpeedShoes==0
+			Player.Acceleration>>=1
+			Player.AirAcceleration>>=1
+			Player.TopSpeed>>=1
+			if Music.CurrentTrack==3
+				PlayMusic(0)
+			end if
+		end if
+	end if
+
+	if Player.Invincibility>0
+
+		if Player.State!=HURT_RECOIL
+			if Player.Invincibility>1080
+				Player.Invincibility=120
+				Player.Flashing=3
+			end if
+		end if
+
+		if Player.Flashing>0
+			Player.Flashing++
+			if Player.Flashing>8
+				Player.Flashing=1
+			end if
+			if Player.Flashing>4
+				Player.Visible=false
+			else
+				Player.Visible=true
+			end if
+		end if
+
+		Player.Invincibility--
+		if Player.Invincibility==0
+			Player.Flashing=0
+			Player.Visible=true
+			if Music.CurrentTrack==2
+				PlayMusic(0)
+			end if
+
+			if Object[+2].Type==20
+
+				//Did the Player have a shield beforehand?
+				switch Object[+2].PropertyValue
+				case 0
+					TempValue0=Player.EntityNo
+					TempValue0+=2
+					ResetObjectEntity(TempValue0,0,0,0)
+					break
+				case 1
+					TempValue0=Player.EntityNo
+					TempValue0+=2
+					ResetObjectEntity(TempValue0,0,0,0)
+					Object[+2].Type=25
+					Object[+2].PropertyValue=1
+					Object[+2].Priority=1
+					Object[+2].DrawOrder=4
+					Object[+2].InkEffect=1
+					Object[+2].XPos=Player.XPos
+					Object[+2].YPos=Player.YPos
+					break
+				end switch
+
+			end if
+		end if
+
+	end if
+
+	if Player.State!=4
+		if Player.State!=5
+			if Player.LookPos>0
+				Player.LookPos-=2
+			end if
+			if Player.LookPos<0
+				Player.LookPos+=2
+			end if
+		end if
+	end if
+
+end sub
+
+//----0 : Normal Ground Movement----//
+sub PlayerState NORMAL_GROUND_MOVEMENT
+
+	DefaultGroundMovement
+
+	if Player.Gravity==true
+		Player.State=AIR_MOVEMENT
+		DefaultGravityTrue
+	else
+		DefaultGravityFalse
+
+		if Player.Speed==0
+
+			if Player.Timer<240
+				Player.Animation=ANI_STOPPED
+				Player.Timer++
+			else
+				Player.Animation=ANI_WAITING
+			end if
+
+			if Player.Flailing[1]==false
+				if Player.Flailing[2]==false
+					if Player.Direction==FACING_LEFT
+						Player.Animation=ANI_FLAILINGLEFT
+					else
+						Player.Animation=ANI_FLAILINGRIGHT
+					end if
+				end if
+
+				if Player.Flailing[0]==false
+					if Player.Direction==FACING_RIGHT
+						Player.Animation=ANI_FLAILINGLEFT
+					else
+						Player.Animation=ANI_FLAILINGRIGHT
+					end if
+
+				end if
+			end if
+
+		else
+			Player.Timer=0
+			if Player.Speed>0
+				if Player.Speed<390594
+					Player.Animation=ANI_WALKING
+				else
+					if Player.Speed>655359
+						Player.Animation=ANI_PEELOUT
+					else
+						Player.Animation=ANI_RUNNING
+					end if
+				end if
+			else
+				if Player.Speed>-390594
+					Player.Animation=ANI_WALKING
+				else
+					if Player.Speed<-655359
+						Player.Animation=ANI_PEELOUT
+					else
+						Player.Animation=ANI_RUNNING
+					end if
+				end if
+			end if
+		
+		end if
+
+		if Player.Skidding>0
+			if Player.Skidding==16
+				PlaySfx(8,false)
+			end if
+			Player.Animation=ANI_SKIDDING
+			Player.Skidding--
+		end if
+	
+		if Player.Pushing==2
+			Player.Animation=ANI_PUSHING
+		end if
+
+		if Player.JumpPress==true
+			DefaultJumpAction
+			Player.State=AIR_MOVEMENT
+			PlaySfx(0,false)
+		else
+			if Player.Up==true
+				if Player.Speed==0
+					if Player.Flailing[1]==true
+						Player.State=LOOKING_UP
+						Player.Animation=ANI_LOOKINGUP
+						Player.Timer=0
+					end if
+				end if
+			end if
+
+			if Player.Down==true
+
+				if Player.Speed==0
+					if Player.Flailing[1]==true
+						Player.State=LOOKING_DOWN
+						Player.Animation=ANI_LOOKINGDOWN
+						Player.Timer=0
+					end if
+				else
+					if Player.Speed>6554
+						Player.FrictionLoss=0
+						Player.State=ROLLING
+						Player.Animation=ANI_JUMPING
+						PlaySfx(5,false)
+					end if
+					if Player.Speed<-6554
+						Player.FrictionLoss=0
+						Player.State=ROLLING
+						Player.Animation=ANI_JUMPING
+						PlaySfx(5,false)
+					end if
+				end if
+
+			end if
+		end if
+
+	end if
+
+end sub
+
+//----1 : Air Movement----//
+sub PlayerState AIR_MOVEMENT
+
+	DefaultAirMovement
+
+	if Player.Gravity==true
+
+		DefaultGravityTrue
+
+		if Player.Animation==ANI_BOUNCING
+			if Player.YVelocity>=0
+				Player.Animation=ANI_WALKING
+			end if
+		end if
+
+	else
+		Player.State=NORMAL_GROUND_MOVEMENT
+		DefaultGravityFalse
+	end if
+
+end sub
+
+//----2 : Rolling Movement----//
+sub PlayerState ROLLING
+
+	DefaultRollingMovement
+
+	if Player.Gravity==true
+		Player.State=AIR_MOVEMENT
+		DefaultGravityTrue
+	else
+		DefaultGravityFalse
+		if Player.JumpPress==true
+			DefaultJumpAction
+			Player.State=ROLLING_JUMP
+			PlaySfx(0,false)
+		end if
+	end if
+
+end sub
+
+
+//----3 : The Rolling Jump----//
+//(the player loses control of left and right until landing)
+sub PlayerState ROLLING_JUMP
+
+	Player.Left=false
+	Player.right=false
+	DefaultAirMovement
+
+	if Player.Gravity==true
+		DefaultGravityTrue
+	else
+		Player.State=NORMAL_GROUND_MOVEMENT
+		DefaultGravityFalse
+	end if
+
+end sub
+
+//----4 : Looking Up----//
+sub PlayerState LOOKING_UP
+
+	if Player.Up==false
+		Player.State=NORMAL_GROUND_MOVEMENT
+		Player.Timer=0
+	else
+		if Player.Timer<60
+			Player.Timer++
+		else
+			if Player.LookPos>-112
+				Player.LookPos-=2
+			end if
+		end if
+		if Player.Gravity==true
+			Player.State=AIR_MOVEMENT
+			Player.Timer=0
+		else
+			if Player.JumpPress==true
+				Player.State=PEELOUT
+				Player.SpinDash=0
+				PlaySfx(6,false)
+			end if
+		end if
+	end if
+
+end sub
+
+//----5 : Looking Down----//
+sub PlayerState LOOKING_DOWN
+
+	if Player.Down==false
+		Player.State=NORMAL_GROUND_MOVEMENT
+		Player.Timer=0
+	else
+		if Player.Timer<60
+			Player.Timer++
+		else
+			if Player.LookPos<96
+				Player.LookPos+=2
+			end if
+		end if
+		if Player.Gravity==true
+			Player.State=AIR_MOVEMENT
+			Player.Timer=0
+		else
+			if Player.JumpPress==true
+				Player.State=SPINDASH
+				Player.Animation=ANI_SPINDASH
+				Player.SpinDash=0
+				PlaySfx(6,false)
+			end if
+		end if
+	end if
+
+end sub
+
+//----6 : SpinDash----//
+sub PlayerState SPINDASH
+
+	if Player.Gravity==true
+		Player.State=AIR_MOVEMENT
+		DefaultGravityTrue
+	else
+		DefaultGravityFalse
+	end if
+
+	if Player.JumpPress==true
+		if Player.SpinDash<512
+			Player.SpinDash+=64
+		end if
+		Player.Frame=0
+		PlaySfx(6,false)
+	else
+		if Player.SpinDash>0
+			Player.SpinDash--
+		end if
+	end if
+
+	if Player.Down==false
+		Player.State=ROLLING
+		Player.Animation=ANI_JUMPING
+
+		TempValue0=Player.SpinDash
+		TempValue0<<=9
+		TempValue0+=524288
+
+		if Player.Direction==FACING_RIGHT
+			Player.Speed=TempValue0
+		else
+			Player.Speed=TempValue0
+			FlipSign(Player.Speed)
+		end if
+		DefaultGravityTrue
+		PlaySfx(7,false)
+	end if
+
+end sub
+
+//----7 : Peel Out----//
+sub PlayerState PEELOUT
+
+	if Player.Gravity==true
+		Player.State=AIR_MOVEMENT
+		Player.Speed=0
+	end if
+
+	if Player.SpinDash<786432
+		Player.SpinDash+=12288
+	end if
+
+	if Player.SpinDash<390594
+		Player.Animation=ANI_WALKING
+
+		TempValue0=Player.SpinDash
+		TempValue0>>=16
+		TempValue0*=Player.WalkingSpeed
+		TempValue0/=6
+		TempValue0+=20
+
+	else
+		TempValue0=Player.SpinDash
+		TempValue0>>=16
+		TempValue0*=Player.RunningSpeed
+		TempValue0/=6
+
+		if Player.SpinDash>655359
+			Player.Animation=ANI_PEELOUT
+		else
+			Player.Animation=ANI_RUNNING
+		end if
+	end if
+
+	if Player.Up==false
+		DefaultGravityTrue
+		Player.State=NORMAL_GROUND_MOVEMENT
+		Player.Speed=Player.SpinDash
+		if Player.Direction==FACING_LEFT
+			FlipSign(Player.Speed)
+		end if
+		PlaySfx(7,false)
+	end if
+
+	Player.AnimationSpeed=TempValue0
+
+end sub
+
+//----8 : Getting Hurt----//
+sub PlayerState GETTING_HURT
+
+	//Does the player have a shield?
+	ArrayPos0=Player.EntityNo
+	ArrayPos0+=2
+	if Object[ArrayPos0].PropertyValue>0
+		TempValue0=1
+		ResetObjectEntity(ArrayPos0,0,0,0,0)
+		PlaySfx(4,false)
+	else
+		//Does the player have any Rings?
+		if Object[0].Value0==0
+			PlaySfx(4,false)
+			TempValue0=3
+		else
+			PlaySfx(3,false)
+			TempValue0=2
+		end if
+	end if
+
+	switch TempValue0
+	case 1 //Shield Recoil - Ouch!
+		Player.State=HURT_RECOIL
+		Player.Animation=ANI_HURT
+		Player.YVelocity=-262144
+		Player.Gravity=true
+		Player.TrackScroll=true
+
+		Player.Invincibility=8000
+
+		if Player.Water==true
+			Player.Speed>>=1
+			Player.YVelocity>>=1
+		end if
+		break
+
+	case 2 //Lose Rings Recoil - Ouch!
+		Player.State=HURT_RECOIL
+		Player.Animation=ANI_HURT
+		Player.YVelocity=-262144
+		Player.Gravity=true
+		Player.TrackScroll=true
+
+		Player.Invincibility=8000
+
+		if Player.Water==true
+			Player.Speed>>=1
+			Player.YVelocity>>=1
+		end if
+
+		//Drop the Rings
+		TempValue0=Object[0].Value0
+		
+		if TempValue0>16
+			TempValue1=TempValue0
+			TempValue1-=16
+			TempValue0=16
+		else
+			TempValue1=0
+		end if
+
+		if TempValue1>16
+			TempValue1=16
+		end if
+
+		TempValue3=TempValue1
+		TempValue3>>=1
+		TempValue3<<=5
+		TempValue2=384
+		TempValue2-=TempValue3
+
+		TempValue3>>=4
+		if TempValue3==TempValue1
+			TempValue2+=16
+		else
+			TempValue2-=16
+		end if
+
+		TempValue3=0
+		while TempValue3<TempValue1
+			CreateTempObject(7,0,Player.XPos,Player.YPos)
+			Cos(Object[TempObjectPos].Value0,TempValue2)
+			Sin(Object[TempObjectPos].Value1,TempValue2)
+			Object[TempObjectPos].Value0<<=8
+			Object[TempObjectPos].Value1<<=8
+
+			TempValue3++
+			TempValue2+=32
+		loop
+
+		TempValue3=TempValue0
+		TempValue3>>=1
+		TempValue3<<=5
+		TempValue2=384
+		TempValue2-=TempValue3
+
+		TempValue3>>=4
+		if TempValue3==TempValue0
+			TempValue2+=16
+		else
+			TempValue2-=16
+		end if
+
+		TempValue3=0
+		while TempValue3<TempValue0
+			CreateTempObject(7,0,Player.XPos,Player.YPos)
+			Cos(Object[TempObjectPos].Value0,TempValue2)
+			Sin(Object[TempObjectPos].Value1,TempValue2)
+			Object[TempObjectPos].Value0<<=9
+			Object[TempObjectPos].Value1<<=9
+
+			TempValue3++
+			TempValue2+=32
+		loop
+
+		Object[0].Value0=0
+		RingExtraLife=99
+		break
+
+	case 3 //Death - Gadzooks!!
+		Player.Speed=0
+		Player.YVelocity=-425984
+		Player.State=DYING
+		Player.Animation=ANI_DYING
+		Player.TileCollisions=false
+		Player.ObjectInteraction=false
+
+		if Player.EntityNo==0
+			Stage.CameraEnabled=false
+		end if
+		break
+	end switch
+
+end sub
+
+//----9 : Hurt Recoil----//
+sub PlayerState HURT_RECOIL
+
+	if Player.Gravity==true
+		DefaultGravityTrue
+	else
+		Player.State=NORMAL_GROUND_MOVEMENT
+		Player.Invincibility=120
+		Player.Flashing=3
+		Player.Speed=0
+		Player.XVelocity=0
+		DefaultGravityFalse
+	end if
+
+end sub
+
+//----10 : Dying----//
+sub PlayerState DYING
+
+	Player.YVelocity+=14336
+	Player.YPos+=Player.YVelocity
+
+	if Player.YVelocity>1048576
+
+		if PLives>0
+			PLives--
+		end if
+
+		Stage.TimeEnabled=false
+
+		Object.Type=21
+		Object.DrawOrder=6
+
+		Object.Value1=-8
+		Object.Value2=327
+
+		if PLives==0
+			Object.Value3=-2880
+			Object.State=0
+			PlayMusic(7)
+			Stage.PauseEnabled=false
+		else
+			Object.Value3=0
+			Object.State=2
+
+			if Stage.Minutes==9
+				if Stage.Seconds==59
+					Object.Value3=-2880
+					Object.State=1
+					PlayMusic(7)
+					Stage.PauseEnabled=false
+				end if
+			end if
+		end if
+
+	end if
+
+end sub
+
+//----11 : Drowning----//
+sub PlayerState DROWNING
+	//I'll do it Later
+end sub
+
+//----12 : Hanging----//
+sub PlayerState HANGING
+	//Nothing happens when you're hanging
+end sub
+
+//----13 : Corkscrew Run----//
+sub PlayerState CORKSCREW_RUN
+	Player.Angle=0
+	DefaultGroundMovement
+	Player.Animation=34
+
+	if Player.Speed<393216
+		if Player.Speed>-393216
+			Player.Animation=ANI_WALKING
+			Player.State=AIR_MOVEMENT
+			Player.Rotation=0
+			if Player.Speed<0
+				Player.Direction=FACING_LEFT
+			end if
+		end if
+	end if
+
+	if Player.Down==true
+		if Player.Speed>6554
+			Player.State=CORKSCREW_ROLL
+			Player.Animation=ANI_JUMPING
+			PlaySfx(5,false)
+		end if
+		if Player.Speed<-6554
+			Player.State=CORKSCREW_ROLL
+			Player.Animation=ANI_JUMPING
+			PlaySfx(5,false)
+		end if
+	end if
+
+	if Player.Skidding>0
+		if Player.Skidding==16
+			PlaySfx(8,false)
+		end if
+		Player.Animation=ANI_SKIDDING
+		Player.Skidding--
+	end if
+
+	if Player.JumpPress==true
+		DefaultJumpAction
+		Player.State=AIR_MOVEMENT
+		PlaySfx(0,false)
+	else
+		DefaultGravityFalse
+	end if
+end sub
+
+//----14 : Corkscrew Roll----//
+sub PlayerState CORKSCREW_ROLL
+	Player.Angle=0
+	DefaultRollingMovement
+
+	if Player.Speed<393216
+		if Player.Speed>-393216
+			Player.State=AIR_MOVEMENT
+		end if
+	end if
+
+	if Player.JumpPress==true
+		DefaultJumpAction
+		Player.State=ROLLING_JUMP
+		PlaySfx(0,false)
+	else
+		DefaultGravityFalse
+	end if
+end sub
+
+//----15 : Tube Rolling Movement----//
+sub PlayerState TUBE_ROLLING
+
+	if Player.Speed>0
+		if Player.Speed<Player.MinRollSpeed
+			Player.Speed=Player.MinRollSpeed
+		end if
+
+		if Player.Speed>1048576
+			Player.Speed=1048576
+		end if
+	else
+		TempValue0=Player.MinRollSpeed
+		FlipSign(TempValue0)
+		if Player.Speed>TempValue0
+			Player.Speed=TempValue0
+			DefaultGravityFalse
+		end if
+
+		if Player.Speed<-1048576
+			Player.Speed=-1048576
+		end if
+	end if
+
+	if Player.Gravity==true
+		Player.State=AIR_MOVEMENT
+		DefaultGravityTrue
+	else
+		DefaultRollingMovement
+		DefaultGravityFalse
+	end if
+
+end sub

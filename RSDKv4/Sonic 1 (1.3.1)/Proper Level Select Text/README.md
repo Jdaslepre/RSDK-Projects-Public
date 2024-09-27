@@ -2,3 +2,5 @@
 ## Proper Level Select Text
 
 Adds proper capitalization to the Level Select.
+
+![Image of the RSDK Mod!](/Assets/RSDKv4-LevelChars.png)

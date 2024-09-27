@@ -1,0 +1,593 @@
+//---------------Sonic Nexus SSZ Shield---------------//
+//----Scripted by Christian Whitehead "The Taxman"----//
+//----------Elemental Shields mod by Nd1206-----------//
+
+#alias 25 : TYPE_BLUESHIELD
+
+#alias 1 : AIR_MOVEMENT
+#alias 9 : HURT_RECOIL
+
+#alias 10 : ANI_JUMPING
+#alias 12 : ANI_HURT
+
+#alias Object[2].Value3 : Object.Animation
+#alias Object[2].Value4 : Player.UsedAbility
+#alias Object.Value5 : Object.Timer
+#alias Object.Value6 : Object.AnimTimer
+
+//Used for Lightning Sparks
+#alias Object.Value6 : Object.XVelocity
+#alias Object.Value7 : Object.YVelocity
+
+sub ObjectDraw
+	if Object[2].PropertyValue==1
+		LoadPalette("Data/Palettes/BShieldTint.act",80,96)
+		SetBlendTable(128,1,16,80)
+	else
+		if Object[2].PropertyValue==4
+			LoadPalette("Data/Palettes/BubShieldTint.act",80,96)
+			SetBlendTable(128,1,16,80)
+		end if
+	end if
+	if Object[2].Type==20
+		LoadPalette("Data/Palettes/BShieldTint.act",80,96)
+		SetBlendTable(128,1,16,80)
+	end if
+	if Object.PropertyValue==2
+		if Object.Value0==0
+			CheckResult=0
+			if Object.Value1==1
+				CheckResult=1
+			end if
+			if Object.Frame>=9
+				CheckResult=0
+			end if
+			if CheckResult==0
+				Object.DrawOrder=4
+			else
+				Object.DrawOrder=3
+			end if
+		end if
+	end if
+	if Object.PropertyValue==3
+		if Object.Value0==0
+			CheckResult=0
+			if Object.Frame==0
+				CheckResult=1
+			end if
+			if Object.Frame==2
+				CheckResult=1
+			end if
+			if Object.Frame==4
+				CheckResult=1
+			end if
+			if Object.Frame==6
+				CheckResult=1
+			end if
+			if Object.Frame==8
+				CheckResult=1
+			end if
+			if Object.Frame==10
+				CheckResult=1
+			end if
+			if Object.Frame==12
+				CheckResult=1
+			end if
+			if Object.Frame==14
+				CheckResult=1
+			end if
+			if Object.Frame==16
+				CheckResult=1
+			end if
+			if Object.Timer>0
+				CheckResult=0
+			end if
+			if CheckResult==0
+				Object.DrawOrder=4
+			else
+				Object.DrawOrder=3
+			end if
+		end if
+	end if
+	if Player.State==HURT_RECOIL
+		Object[2].PropertyValue=0
+		Object[2].Type=25
+		Object[2].Priority=1
+		Object[2].DrawOrder=4
+		Object[2].XPos=Player.XPos
+		Object[2].YPos=Player.YPos
+	end if
+	if Object[2].PropertyValue==0
+		Object[2].PropertyValue=0
+		Object[2].Type=25
+		Object[2].Priority=1
+		Object[2].DrawOrder=4
+		Object[2].XPos=Player.XPos
+		Object[2].YPos=Player.YPos
+	end if
+	Object.Value0++
+	switch Object.PropertyValue
+	case 0
+		TempValue0=1
+		break
+	default
+		TempValue0=2
+		if Object.PropertyValue==3
+			if Object.Timer>0
+				TempValue0=447
+			end if
+		end if
+		break
+	case 2
+		if Object.Frame<=8
+			TempValue0=4
+		else
+			TempValue0=2
+		end if
+		break
+	case 47
+		TempValue0=0
+		break
+	end switch
+	if Object.Value0>=TempValue0
+		Object.Value0=0
+		switch Object.PropertyValue
+		default
+			Object.Frame++
+			break
+		case 0
+			if Object.State==1
+				Object.Frame++
+				if Object.Frame>7
+					Object.State = 0
+				end if
+			end if
+			break
+		case 2
+			if Object.Value1==0
+				Object.Frame++
+			else
+				if Object.Frame<=8
+					if Object.Frame!=0
+						Object.Frame--
+					else
+						Object.Frame=9
+					end if
+				else
+					Object.Frame++
+				end if
+			end if
+			break
+		case 4
+			Object.Timer++
+			if Object.Animation!=0
+				Object.Timer = -1
+			end if
+			if Object.Timer>=54
+				Object.Timer=0
+			end if
+			switch Object.Timer
+			case 1
+			case 3
+			case 5
+			case 13
+			case 15
+			case 17
+			case 25
+			case 27
+			case 29
+			case 37
+			case 39
+			case 41
+			case 53
+			case 54
+			case 55
+				Object.Frame=0
+				break
+			case 7
+			case 9
+			case 11
+			case 19
+			case 21
+			case 23
+			case 31
+			case 33
+			case 35
+			case 43
+			case 45
+			case 47
+				Object.Frame=1
+				break
+			case 0
+			case 2
+			case 4
+				Object.Frame=2
+				break
+			case 6
+			case 8
+			case 10
+				Object.Frame=3
+				break
+			case 12
+			case 14
+			case 16
+				Object.Frame=4
+				break
+			case 18
+			case 20
+			case 22
+				Object.Frame=5
+				break
+			case 24
+			case 26
+			case 28
+				Object.Frame=6
+				break
+			case 30
+			case 32
+			case 34
+				Object.Frame=7
+				break
+			case 36
+			case 38
+			case 40
+				Object.Frame=8
+				break
+			case 42
+			case 44
+			case 46
+				Object.Frame=9
+				break
+			case 48
+			case 50
+			case 52
+				Object.Frame=10
+				break
+			end switch
+			break
+		end switch
+		switch Object.PropertyValue
+		default
+			TempValue0=7
+			break
+		case 2
+			TempValue0=11
+			break
+		case 3
+			if Object.Timer <= 0
+				TempValue0=17
+			else
+				TempValue0=4
+			end if
+			break
+		case 4
+			TempValue0=447
+			break
+		case 47
+			TempValue0=2
+			break
+		end switch
+		if Object.Frame>TempValue0
+			switch Object.PropertyValue
+			default
+				Object.Frame=0
+				break
+			case 2
+				Object.Value1^=1
+				if Object.Value1==1
+					Object.Frame=8
+				else
+					Object.Frame=0
+				end if
+				break
+			end switch
+		end if
+	end if
+
+	switch Object.PropertyValue
+	case 4
+		if Player.Animation!=ANI_JUMPING
+			Object[2].State=0
+		end if
+		if Object.Animation!=0
+			Object.AnimTimer++
+			if Object.Animation==1
+				TempValue3=5
+			else
+				if Object.Frame==11
+					TempValue3=14
+				else
+					TempValue3=7
+				end if
+			end if
+			if Object.AnimTimer>=TempValue3
+				if Object.Frame==0
+					Object.Frame=12
+				else
+					Object.Frame++
+					if Object.Frame==13
+						Object.Frame=0
+						Object.AnimTimer=0
+						Object.Animation=0
+					end if
+				end if
+				Object.AnimTimer=0
+			end if
+		end if
+		break
+	case 47
+		Object.XPos+=Object.XVelocity
+		Object.YPos+=Object.YVelocity
+		Object.Timer++
+		if Object.Timer>=22
+			Object.Type=0
+		end if
+		break
+	end switch
+
+	if Object.PropertyValue == 1
+		DrawSpriteFX(Object.Frame,FX_INK,Player.XPos,Player.YPos)
+	else
+		if Object.Type==25
+			TempValue0=Object.Frame
+			switch Object.PropertyValue
+			case 0
+				TempValue0+=63
+				break
+			case 2
+				TempValue0+=8
+				break
+			case 3
+				TempValue0+=23
+				if Object.Timer>0
+					TempValue0+=18
+					if Object.Direction==1
+						TempValue0+=4
+					end if
+				end if
+				break
+			case 4
+				TempValue0+=49
+				break
+			case 47
+				TempValue0+=20
+				break
+			end switch
+		//	if Object[2].PropertyValue!=0
+				if Object.PropertyValue!=47
+					if Object.PropertyValue!=4
+						DrawSpriteXY(TempValue0,Player.XPos,Player.YPos)
+					else
+						DrawSpriteFX(TempValue0,FX_INK,Player.XPos,Player.YPos)
+					end if
+				else
+					DrawSprite(TempValue0)
+				end if
+		//	end if
+		end if
+	end if
+
+	if Player.JumpPress==true
+		if Player.Gravity==true
+			if Player.Animation==ANI_JUMPING
+				if Player.YVelocity!=0
+					if Object.Value2==0
+						if Player.UsedAbility==0
+							switch Object[2].PropertyValue
+							default
+								PlaySfx(18,false)
+								Player.State=AIR_MOVEMENT
+								Object.State=1
+								break
+							case 1
+							case 47
+								break
+							case 2
+								PlaySfx(20,false)
+								Player.YVelocity=-0x58000
+								CreateTempObject(Object.Type,47,Player.XPos,Player.YPos)
+								Object[TempObjectPos].XVelocity=-0x20000
+								Object[TempObjectPos].YVelocity=-0x20000
+								CreateTempObject(Object.Type,47,Player.XPos,Player.YPos)
+								Object[TempObjectPos].XVelocity=0x20000
+								Object[TempObjectPos].YVelocity=-0x20000
+								CreateTempObject(Object.Type,47,Player.XPos,Player.YPos)
+								Object[TempObjectPos].XVelocity=-0x20000
+								Object[TempObjectPos].YVelocity=0x20000
+								CreateTempObject(Object.Type,47,Player.XPos,Player.YPos)
+								Object[TempObjectPos].XVelocity=0x20000
+								Object[TempObjectPos].YVelocity=0x20000
+								Player.State=AIR_MOVEMENT
+								break
+							case 3
+								PlaySfx(22,false)
+								if Player.Direction==0
+									Player.Speed=0x80000
+								else
+									Player.Speed=-0x80000
+								end if
+								Player.YVelocity=0
+								Object.Timer=12
+								Object.Frame=0
+								Object.Value0=0
+								Object.Direction=Player.Direction
+								Object.DrawOrder=4
+								Player.State=AIR_MOVEMENT
+								break
+							case 4
+								PlaySfx(24,false)
+								Player.Speed=0
+								Player.YVelocity=0x80000
+								Object.Frame=0
+								Object.Value0=0
+								Object.AnimTimer=0
+								Object[2].State=1
+								Object.Animation=1
+								Player.State=AIR_MOVEMENT
+								break
+							end switch
+							Player.UsedAbility=1
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+	if Player.Gravity==true
+		if Object.Value2>0
+			Object.Value2--
+		end if
+	else
+		if Object[2].PropertyValue==4
+			if Object[2].State==1
+				PlaySfx(24,false)
+				Player.YVelocity=-0x70000
+				Object.Frame=11
+				Object.Value0=0
+				Object[2].State=0
+				Object.Animation=2
+				Player.Gravity=true
+				Player.UsedAbility=1
+				Player.State=AIR_MOVEMENT
+			end if
+		end if
+		Object.Value2=1
+		Player.UsedAbility=0
+	end if
+	if Object.PropertyValue==3
+		Object.AnimTimer++
+		if Object.AnimTimer>=3
+			Object.AnimTimer=0
+			if Object.Timer>0
+				Object.Timer--
+				switch Object.Timer
+				case 12
+				case 9
+				case 6
+				case 3
+				case 0
+					Object.Frame=0
+					break
+				case 11
+				case 15
+					Object.Frame=1
+					break
+				case 10
+				case 8
+				case 4
+				case 2
+					Object.Frame=2
+					break
+				case 7
+				case 1
+					Object.Frame=3
+					break
+				end switch
+			end if
+		end if
+	end if
+end sub
+
+sub ObjectStartup
+	
+	LoadSpriteSheet("NexusGlobals/Shields.gif")
+	
+	//Blue Shield Frames
+	SpriteFrame(-24,-24,48,48,1,1)
+	SpriteFrame(-24,-24,48,48,50,1)
+	SpriteFrame(-24,-24,48,48,99,1)
+	SpriteFrame(-24,-24,48,48,148,1)
+	SpriteFrame(-24,-24,48,48,197,1)
+	SpriteFrame(-24,-24,48,48,246,1)
+	SpriteFrame(-24,-24,48,48,1,50)
+	SpriteFrame(-24,-24,48,48,50,50)
+
+	//Lightning Shield Frames
+	SpriteFrame(-24,-24,48,48,1,99)
+	SpriteFrame(-24,-24,48,48,50,99)
+	SpriteFrame(-24,-24,48,48,99,99)
+	SpriteFrame(-24,-24,48,48,148,99)
+	SpriteFrame(-24,-24,48,48,197,99)
+	SpriteFrame(-24,-24,48,48,246,99)
+	SpriteFrame(-24,-24,48,48,1,148)
+	SpriteFrame(-24,-24,48,48,50,148)
+	SpriteFrame(-24,-24,48,48,99,148)
+	SpriteFrame(-24,-24,48,48,148,148)
+	SpriteFrame(-24,-24,48,48,197,148)
+	SpriteFrame(-24,-24,48,48,246,148)
+
+	//Lightning Spark Frames
+	SpriteFrame(0,0,0,0,0,0)
+	SpriteFrame(-3,-3,6,6,99,92)
+	SpriteFrame(-8,-8,16,16,106,82)
+
+	//Fire Shield Frames
+	SpriteFrame(-24,-24,48,48,1,295)
+	SpriteFrame(-24,-24,48,48,50,295)
+	SpriteFrame(-24,-24,48,48,99,295)
+	SpriteFrame(-24,-24,48,48,148,295)
+	SpriteFrame(-24,-24,48,48,197,295)
+	SpriteFrame(-24,-24,48,48,246,295)
+	SpriteFrame(-24,-24,48,48,1,344)
+	SpriteFrame(-24,-24,48,48,50,344)
+	SpriteFrame(-24,-24,48,48,99,344)
+	SpriteFrame(-24,-24,48,48,148,344)
+	SpriteFrame(-24,-24,48,48,197,344)
+	SpriteFrame(-24,-24,48,48,246,344)
+	SpriteFrame(-24,-24,48,48,1,393)
+	SpriteFrame(-24,-24,48,48,50,393)
+	SpriteFrame(-24,-24,48,48,99,393)
+	SpriteFrame(-24,-24,48,48,148,393)
+	SpriteFrame(-24,-24,48,48,197,393)
+	SpriteFrame(-24,-24,48,48,246,393)
+
+	//Fire Dash Frames
+	SpriteFrame(-24,-24,48,48,1,442)
+	SpriteFrame(-24,-24,48,48,50,442)
+	SpriteFrame(-32,-24,56,48,99,442)
+	SpriteFrame(-40,-24,64,48,156,442)
+
+	SpriteFrame(-24,-24,48,48,1,491)
+	SpriteFrame(-24,-24,48,48,50,491)
+	SpriteFrame(-24,-24,56,48,99,491)
+	SpriteFrame(-24,-24,64,48,156,491)
+
+	//Bubble Shield Frames
+	SpriteFrame(-24,-24,48,48,1,197)
+	SpriteFrame(-24,-24,48,48,50,197)
+	SpriteFrame(-24,-24,48,48,99,197)
+	SpriteFrame(-24,-24,48,48,148,197)
+	SpriteFrame(-24,-24,48,48,197,197)
+	SpriteFrame(-24,-24,48,48,246,197)
+	SpriteFrame(-24,-24,48,48,1,246)
+	SpriteFrame(-24,-24,48,48,50,246)
+	SpriteFrame(-24,-24,48,48,99,246)
+	SpriteFrame(-24,-24,48,48,148,246)
+	SpriteFrame(-24,-24,48,48,197,246)
+
+	//Bubble Bounce Frames
+	SpriteFrame(-36,-16,72,32,221,483)
+	SpriteFrame(-28,-20,56,40,221,442)
+	SpriteFrame(-24,-24,48,48,1,197)
+
+	SpriteFrame(0,0,1,1,1,1)
+	SpriteFrame(0,0,1,1,1,1)
+	SpriteFrame(-12,-19,19,19,1,540)
+	SpriteFrame(0,-16,18,21,21,540)
+	SpriteFrame(-3,2,27,24,40,540)
+	SpriteFrame(-24,-16,31,38,68,540)
+	SpriteFrame(-16,-24,40,40,100,540)
+	SpriteFrame(-24,-16,41,40,141,540)
+
+	Object[2].PropertyValue=0
+	Object[2].Type=25
+	Object[2].Priority=1
+	Object[2].DrawOrder=4
+	Object[2].XPos=Player.XPos
+	Object[2].YPos=Player.YPos
+end sub
+
+sub RSDK
+	LoadSpriteSheet("SSZ/Shield.gif")
+	SetEditorIcon(Icon0,SingleIcon,-24,-24,48,48,1,1)
+end sub

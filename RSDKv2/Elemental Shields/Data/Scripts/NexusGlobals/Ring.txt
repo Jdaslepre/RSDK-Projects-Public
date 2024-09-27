@@ -1,0 +1,118 @@
+//-----------------Sonic Nexus Ring-------------------//
+//----Scripted by Christian Whitehead "The Taxman"----//
+
+#alias Object.Value0 : Rings
+#alias 9 : HURT_RECOIL
+
+
+#alias Object.Value3 : Object.XVelocity
+#alias Object.Value4 : Object.YVelocity
+
+sub ObjectPlayerInteraction
+
+	if Player.State!=HURT_RECOIL
+		//Did the player collide with the ring?
+		PlayerObjectCollision(C_TOUCH,-8,-8,8,8)
+
+		if CheckResult==1
+			Object.Value0 = 0
+			Object.Frame = 0
+			Object.Type+=2
+			Object.DrawOrder=4
+			Rings[0]++
+
+			if Rings[0]>999
+				Rings[0]=999
+			end if
+
+			if Rings[0]>=RingExtraLife
+				PLives++
+				PlaySfx(17,false)
+				RingExtraLife+=100
+				if RingExtraLife>300
+					RingExtraLife=1000
+				end if
+			end if
+
+			if RingPan==0
+				SetSfxAttributes(1,-1,-100)
+				RingPan=1
+			else
+				SetSfxAttributes(2,-1,100)
+				RingPan=0
+			end if
+		end if
+
+		if Object[2].PropertyValue == 2
+			PlayerObjectCollision(C_TOUCH, -64, -64, 64, 64)
+			if checkResult == true
+				// Make the ring attracted to the player
+				Object.State = 1
+			end if
+		end if
+	end if
+
+	if Object.State == 1
+		if Object[2].PropertyValue != 2
+			// If the player lost their shield, then make this ring dropped
+			Object.Type++
+			Object.Value0 = Object.XVelocity
+			Object.Value1 = Object.YVelocity
+		else
+			// Move closer to the player
+			if Object.XPos > Player.XPos
+				if Object.XVelocity > 0
+					Object.XVelocity -= 0xC000
+				else
+					Object.XVelocity -= 0x3000
+				end if
+			else
+				if Object.XVelocity < 0
+					Object.XVelocity += 0xC000
+				else
+					Object.XVelocity += 0x3000
+				end if
+			end if
+
+			if Object.YPos > Player.YPos
+				if Object.YVelocity > 0
+					Object.YVelocity -= 0xC000
+				else
+					Object.YVelocity -= 0x3000
+				end if
+			else
+				if Object.YVelocity < 0
+					Object.YVelocity += 0xC000
+				else
+					Object.YVelocity += 0x3000
+				end if
+			end if
+
+			Object.XPos += Object.XVelocity
+			Object.YPos += Object.YVelocity
+		end if
+	end if
+end sub
+
+sub ObjectDraw
+	DrawSprite(RingFrame)
+end sub
+
+sub ObjectStartup
+	LoadSpriteSheet("NexusGlobals/Items.gif")
+	
+	//Ring Frames
+	SpriteFrame(-8,-8,16,16,1,1)
+	SpriteFrame(-8,-8,16,16,1,18)
+	SpriteFrame(-8,-8,16,16,1,35)
+	SpriteFrame(-8,-8,16,16,1,52)
+	SpriteFrame(-8,-8,16,16,1,69)
+	SpriteFrame(-8,-8,16,16,1,86)
+	SpriteFrame(-8,-8,16,16,1,103)
+	SpriteFrame(-8,-8,16,16,1,120)
+end sub
+
+sub RSDK
+	LoadSpriteSheet("NexusGlobals/Items.gif")
+	SetEditorIcon(Icon0,SingleIcon,-8,-8,16,16,1,1)
+end sub
