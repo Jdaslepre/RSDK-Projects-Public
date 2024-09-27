@@ -274,12 +274,10 @@ void PauseMenu::State_Controls()
         Action_TouchButton(2, 128);
         Action_TouchButton(Buttons::ButtonExit, 176);
 
-        if (up) {
-            selectedIndex    = Buttons::ButtonExit;
-            physicalControls = true;
-        }
-        if (down) {
-            selectedIndex    = Buttons::ButtonContinue;
+        if (up || down) {
+            up ? selectedIndex = Buttons::ButtonExit : false;
+            down ? selectedIndex = Buttons::ButtonContinue : false;
+
             physicalControls = true;
         }
     }

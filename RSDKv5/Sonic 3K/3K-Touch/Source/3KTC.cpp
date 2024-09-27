@@ -50,10 +50,6 @@ void LinkGameLogic(RSDK::EngineInfo *info)
     // Set Public Functions
     // --------------------
 
-    // Add a variable that allows other mods to detect if touch controls are enabled
-    // this should be fine to do i think...
-    Mod::AddPublicFunction("useTouchControls", INT_TO_VOID(config.useTouchControls));
-
     ADD_PUBLIC_FUNC(Touch::CheckRect);
     ADD_PUBLIC_FUNC(Touch::Control4Dir);
     ADD_PUBLIC_FUNC(Touch::Control8Dir);
