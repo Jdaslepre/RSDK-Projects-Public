@@ -12,22 +12,10 @@ namespace RSDK
             y = 0;
         }
 
-        public Vector2(ref RSDK.Vector2 other)
-        {
-            x = other.x;
-            y = other.y;
-        }
-
         public Vector2(RSDK.Vector2 other)
         {
             x = other.x;
             y = other.y;
-        }
-
-        public unsafe Vector2(ref RSDK.Vector2* other)
-        {
-            x = other->x;
-            y = other->y;
         }
 
         public unsafe Vector2(RSDK.Vector2* other)

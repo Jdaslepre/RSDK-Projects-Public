@@ -23,26 +23,22 @@ namespace RSDK
     {
         public ushort id;
 
-        public void Init() { unchecked { id = (ushort)-1; } }
+        public void Init() => id = unchecked((ushort)-1);
         public void Get(string path) => id = RSDKTable.GetSfx(path);
-        public bool32 Loaded() { unchecked { return id != (ushort)-1; } }
+        public bool32 Loaded() { return id != unchecked((ushort)-1); }
         public int Play(int loopPoint = 0, int priority = 0xFF) { return RSDKTable.PlaySfx(id, loopPoint, priority); }
         public void Stop() => RSDKTable.StopSfx(id);
         public bool32 IsPlaying() { return RSDKTable.IsSfxPlaying(id); }
 #if RETRO_REV0U
         public static void StopAll() => RSDKTable.StopAllSfx();
 #endif
-        public bool32 Matches(SoundFX other) { return this.id == other.id; }
+        public bool32 Matches(SoundFX other) { return id == other.id; }
         public bool32 Matches(SoundFX* other)
         {
             if (other != null)
-            {
                 return id == other->id;
-            }
             else
-            {
-                unchecked { return id == (ushort)-1; }
-            }
+                return id == unchecked((ushort)-1);
         }
     }
 

@@ -38,7 +38,7 @@ namespace RSDK
         {
             fixed (RSDK.Animator* ani = &this)
             {
-                unchecked { RSDKTable.SetSpriteAnimation(spriteAni != null ? spriteAni->aniFrames : (ushort)-1, listID, ani, force, frameID); }
+                RSDKTable.SetSpriteAnimation(spriteAni != null ? spriteAni->aniFrames : unchecked((ushort)-1), listID, ani, force, frameID);
             }
         }
 #endif
@@ -51,7 +51,7 @@ namespace RSDK
         {
             fixed (RSDK.Animator* ani = &this)
             {
-                unchecked { RSDKTable.SetModelAnimation(mesh != null ? mesh->id : (ushort)-1, ani, speed, loopIndex, forceApply, frameID); }
+                RSDKTable.SetModelAnimation(mesh != null ? mesh->id : unchecked((ushort)-1), ani, speed, loopIndex, forceApply, frameID);
             }
         }
 
