@@ -6,7 +6,7 @@ namespace RSDK
     {
         public ushort id;
 
-        public void Init() { id = unchecked((ushort)-1); }
+        public void Init() => id = unchecked((ushort)-1);
 
         public void Load(string path, Scopes scope) => id = RSDKTable.LoadMesh(path, (byte)scope);
         public bool32 Loaded() { return id != unchecked((ushort)-1); }
@@ -15,7 +15,7 @@ namespace RSDK
         public bool32 Matches(RSDK.Mesh* other)
         {
             if (other != null)
-            
+
                 return id == other->id;
             else
                 return id == unchecked((ushort)-1);
@@ -26,18 +26,18 @@ namespace RSDK
     {
         public enum DrawTypes
         {
-            DRAWTYPE_WIREFRAME,
-            DRAWTYPE_SOLIDCOLOR,
-            DRAWTYPE_UNUSED1,
-            DRAWTYPE_UNUSED2,
-            DRAWTYPE_WIREFRAME_SHADED,
-            DRAWTYPE_SOLIDCOLOR_SHADED,
-            DRAWTYPE_SOLIDCOLOR_SHADED_BLENDED,
-            DRAWTYPE_WIREFRAME_SCREEN,
-            DRAWTYPE_SOLIDCOLOR_SCREEN,
-            DRAWTYPE_WIREFRAME_SHADED_SCREEN,
-            DRAWTYPE_SOLIDCOLOR_SHADED_SCREEN,
-            DRAWTYPE_SOLIDCOLOR_SHADED_BLENDED_SCREEN,
+            Wireframe,
+            SolidColor,
+            Unused1,
+            Unused2,
+            Wireframe_Shaded,
+            SolidColor_Shaded,
+            SolidColor_Shaded_Blended,
+            Wireframe_Screen,
+            SolidColor_Screen,
+            Wireframe_Shaded_Screen,
+            SolidColor_Shaded_Screen,
+            SolidColor_Shaded_Blended_Screen,
         }
 
         public ushort id;
@@ -52,10 +52,15 @@ namespace RSDK
         public void SetDiffuseIntensity(byte x, byte y, byte z) => RSDKTable.SetDiffuseIntensity(id, x, y, z);
         public void SetSpecularIntensity(byte x, byte y, byte z) => RSDKTable.SetSpecularIntensity(id, x, y, z);
 
-        public void AddModel(RSDK.Mesh modelFrames, RSDK.Scene3D.DrawTypes drawMode, RSDK.Matrix* matWorld, RSDK.Matrix* matView, uint color) => RSDKTable.AddModelTo3DScene(modelFrames.id, id, (byte)drawMode, matWorld, matView, color);
+        public void AddModel(Mesh modelFrames, DrawTypes drawMode, ref Matrix matWorld, ref Matrix matView, uint color)
+        {
+            fixed (Matrix* w = &matWorld)
+            fixed (Matrix* v = &matView)
+                RSDKTable.AddModelTo3DScene(modelFrames.id, id, (byte)drawMode, w, v, color);
+        }
         public void AddMesh(RSDK.Mesh modelFrames, RSDK.Animator* animator, RSDK.Scene3D.DrawTypes drawMode, RSDK.Matrix* matWorld, RSDK.Matrix* matNormal, uint color) => RSDKTable.AddMeshFrameTo3DScene(modelFrames.id, id, animator, (byte)drawMode, matWorld, matNormal, color);
 
-        public bool32 Loaded() { unchecked { return id != (ushort)-1; } }
+        public bool32 Loaded() { return id != unchecked((ushort)-1); }
 
         public bool32 Matches(RSDK.Mesh other) { return id == other.id; }
         public bool32 Matches(RSDK.Mesh* other)

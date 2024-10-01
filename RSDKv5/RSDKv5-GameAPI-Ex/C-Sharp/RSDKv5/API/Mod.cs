@@ -1,5 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using static RSDK.EngineAPI;
+﻿using static RSDK.EngineAPI;
+
+#if RETRO_USE_MOD_LOADER
 
 namespace RSDK
 {
@@ -120,3 +121,5 @@ namespace RSDK
         public static void RegisterStateHook(delegate* unmanaged<void> state, delegate* unmanaged<uint, uint> hook, uint priority) => modTable.RegisterStateHook(state, hook, priority);
     }
 }
+
+#endif

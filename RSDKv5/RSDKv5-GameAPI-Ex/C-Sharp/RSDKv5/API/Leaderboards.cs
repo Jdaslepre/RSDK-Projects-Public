@@ -1,5 +1,4 @@
-﻿using System;
-using static RSDK.EngineAPI;
+﻿using static RSDK.EngineAPI;
 
 #if RETRO_REV02
 namespace RSDK

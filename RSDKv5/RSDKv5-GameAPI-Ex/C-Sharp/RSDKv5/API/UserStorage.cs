@@ -66,25 +66,23 @@ namespace RSDK.API
             public ushort id;
 
             // Management
-            public void Init() { unchecked { id = (ushort)-1; } }
-            public void Init(string name, string arg1, string arg2, string arg3, string arg4, string arg5) => APITable.InitUserDB(name, arg1, arg2, arg3, arg4, arg5);
+            public void Init() => id = unchecked((ushort)-1); 
+            public void Init(string name, string arg1, string arg2, string arg3, string arg4, string arg5) => id = APITable.InitUserDB(name, arg1, arg2, arg3, arg4, arg5);
+
             public void Load(string filename, delegate* unmanaged<int, void> callback) => id = APITable.LoadUserDB(filename, callback);
             public void Save(delegate* unmanaged<int, void> callback) => APITable.SaveUserDB(id, callback);
             public void Clear() => APITable.ClearUserDB(id);
             public static void ClearAll() => APITable.ClearAllUserDBs();
-            public bool32 Loaded() { unchecked { return id != (ushort)-1; } }
+
+            public bool32 Loaded() { return id != unchecked((ushort)-1); }
 
             public bool32 Matches(UserDB other) { return id == other.id; }
             public bool32 Matches(UserDB* other)
             {
                 if (other != null)
-                {
-                    return id == other->id;
-                }
+                    return id == other->id;                
                 else
-                {
-                    unchecked { return id == (ushort)-1; }
-                }
+                    return id == unchecked((ushort)-1);
             }
 
             // Sorting

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Numerics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
-using Windows.Devices.Lights;
-using Windows.Media.Devices;
-using WinRT;
-using static RSDK.Dev;
-using static RSDK.Mod;
 
 namespace RSDK
 {
@@ -714,7 +707,7 @@ namespace RSDK
 #endif
         public IntPtr gameInfo;
 #if RETRO_REV02
-        public IntPtr currentSKU;
+        public RSDK.SKUInfo* currentSKU;
 #endif
         public RSDK.SceneInfo* sceneInfo;
         public IntPtr controllerInfo;
@@ -747,7 +740,7 @@ namespace RSDK
         public static SceneInfo* sceneInfo = null;
 
         public static GameInfo gameInfo = new();
-        public static SKUInfo SKU = new();
+        public static SKUInfo *SKU = null;
 
         public static ControllerState controllerInfo = new();
         public static AnalogState analogStickInfoL = new();
@@ -768,7 +761,7 @@ namespace RSDK
 #endif
             gameInfo = Marshal.PtrToStructure<GameInfo>(info->gameInfo);
 #if RETRO_REV02
-            SKU = Marshal.PtrToStructure<SKUInfo>(info->currentSKU);
+            SKU = info->currentSKU;
 #endif
             sceneInfo = info->sceneInfo;
             controllerInfo = Marshal.PtrToStructure<ControllerState>(info->controllerInfo);

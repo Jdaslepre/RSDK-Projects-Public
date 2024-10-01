@@ -1,4 +1,4 @@
-﻿using System;
+﻿ausing System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 namespace CS_LinkTest;
@@ -19,4 +19,15 @@ class Program
     }
 
   
+}using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
+namespace RSDKGame;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+    }
 }

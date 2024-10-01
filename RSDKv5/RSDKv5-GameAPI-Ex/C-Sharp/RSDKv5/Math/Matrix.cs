@@ -18,7 +18,14 @@ namespace RSDK
         public void RotateXYZ(int x, int y, int z) { fixed (RSDK.Matrix* m = &this) { RSDKTable.MatrixRotateXYZ(m, (short)x, (short)y, (short)z); } }
         public void Inverse() { fixed (RSDK.Matrix* m = &this) RSDKTable.MatrixInverse(m, m); }
 
-        public static void Multiply(RSDK.Matrix* dest, RSDK.Matrix* matrixA, RSDK.Matrix* matrixB) => RSDKTable.MatrixMultiply(dest, matrixA, matrixB);
+        public static void Multiply(ref Matrix dest, ref Matrix matrixA, ref Matrix matrixB)
+        {
+            // man.
+            fixed (Matrix* d = &dest)
+            fixed (Matrix* a = &matrixA)
+            fixed (Matrix* b = &matrixB)
+                RSDKTable.MatrixMultiply(d, a, b);
+        }
         public static void Copy(RSDK.Matrix* matDest, RSDK.Matrix* matSrc) => RSDKTable.MatrixCopy(matDest, matSrc);
         public static void Inverse(RSDK.Matrix* dest, RSDK.Matrix* matrix) => RSDKTable.MatrixInverse(dest, matrix);
 

@@ -14,9 +14,9 @@ namespace RSDK
         public static int SET_BIT(int value, int set, int pos) { return value ^= (-set ^ (value)) & (1 << (pos)); }
         public static int GET_BIT(int b, int pos) { return (b) >> (pos) & 1; }
 
-        public static void* INT_TO_VOID(int x) { return (void*)(long)x; }
+        public static void* INT_TO_VOID(int x) { return (void*)(size_t)x; }
         public static void* FLOAT_TO_VOID(float x) { return INT_TO_VOID(*(int*)&x); }
-        public static int VOID_TO_INT(void* x) { return (int)(long)x; }
+        public static int VOID_TO_INT(void* x) { return (int)(size_t)x; }
         public static float VOID_TO_FLOAT(void* x) { return *(float*)&x; }
 
         public static int TO_FIXED(int x) { return (x) << 16; }

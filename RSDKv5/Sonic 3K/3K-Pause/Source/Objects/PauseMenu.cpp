@@ -17,28 +17,28 @@ MOD_REGISTER_OBJECT(PauseMenu);
 
 void PauseMenu::Update()
 {
-    state.Run(this);
-    selectionAnimator.Process();
+    this->state.Run(this);
+    this->selectionAnimator.Process();
 
     ControllerState *controller = &controllerInfo[Input::CONT_P1];
     AnalogState *stick          = &analogStickInfoL[Input::CONT_P1];
 
-    up = controller->keyUp.press;
-    up |= stick->keyUp.press;
+    this->up = controller->keyUp.press;
+    this->up |= stick->keyUp.press;
 
-    down = controller->keyDown.press;
-    down |= stick->keyDown.press;
+    this->down = controller->keyDown.press;
+    this->down |= stick->keyDown.press;
 
-    start = controller->keyStart.press;
-    start |= controller->keyA.press;
-    start |= unknownInfo->pausePress;
+    this->start = controller->keyStart.press;
+    this->start |= controller->keyA.press;
+    this->start |= unknownInfo->pausePress;
 }
 
 void PauseMenu::LateUpdate()
 {
     auto pState = GameObject::Get<Player>(triggerPlayer)->state.state;
 
-    if (state.Matches(StateMachine_None)) {
+    if (this->state.Matches(StateMachine_None)) {
         if (1 == 0 /*pState.Matches(&Player::State_Death) || pState.Matches(&Player::State_Drown)*/) {
             Destroy();
         }
@@ -61,7 +61,7 @@ void PauseMenu::Draw()
     if (sceneInfo->activeCategory == 5)
         paletteBank[3].SetActivePalette(0, 255);
 
-    stateDraw.Run(this);
+    this->stateDraw.Run(this);
 
     if (sceneInfo->activeCategory == 5)
         paletteBank[0].SetActivePalette(0, 255);
@@ -69,7 +69,7 @@ void PauseMenu::Draw()
 
 void PauseMenu::Create(void *data)
 {
-    animator.SetAnimation(modSVars->aniFrames, 0, true, 0);
+    this->animator.SetAnimation(modSVars->aniFrames, 0, true, 0);
 
     switch (GET_CHARACTER_ID(1)) {
         default:
@@ -82,18 +82,18 @@ void PauseMenu::Create(void *data)
             // case ID_AMY: selectionAnimator.SetAnimation(modSVars->aniFrames, 4, true, 0); break;
     }
 
-    backgroundAlpha = 74;
+    this->backgroundAlpha = 74;
 
     if (!sceneInfo->inEditor) {
-        active = ACTIVE_ALWAYS;
+        this->active = ACTIVE_ALWAYS;
 
         if (data == INT_TO_VOID(true)) {
-            visible   = true;
-            drawGroup = DRAWGROUP_COUNT - 1;
+            this->visible   = true;
+            this->drawGroup = DRAWGROUP_COUNT - 1;
         }
         else {
-            state.Set(StateMachine_None);
-            stateDraw.Set(StateMachine_None);
+            this->state.Set(StateMachine_None);
+            this->stateDraw.Set(StateMachine_None);
         }
     }
 }
@@ -114,23 +114,23 @@ void PauseMenu::StageLoad()
 void PauseMenu::DrawPauseRect(int32 y)
 {
     // 'PAUSE' rect left
-    Graphics::DrawRect(position.x + 128, NULL, 128, screenInfo->size.y, 0x000000, 0xFF, INK_NONE, true);
+    Graphics::DrawRect(this->position.x + 128, NULL, 128, screenInfo->size.y, 0x000000, 0xFF, INK_NONE, true);
 
     // 'PAUSE' text sprite
-    animator.frameID = 4;
-    drawPos.x        = TO_FIXED(pauseBarPos.x - screenInfo->size.x);
-    drawPos.y        = TO_FIXED(y);
-    animator.DrawSprite(&drawPos, true);
+    this->animator.frameID = 4;
+    this->drawPos.x        = TO_FIXED(this->pauseBarPos.x - screenInfo->size.x);
+    this->drawPos.y        = TO_FIXED(y);
+    this->animator.DrawSprite(&this->drawPos, true);
 
     // 'PAUSE' rect right
-    Graphics::DrawRect(pauseBarPos.x - screenInfo->size.x + 106, y, screenInfo->size.x, 13, 0x000000, 0xFF, INK_NONE, true);
+    Graphics::DrawRect(this->pauseBarPos.x - screenInfo->size.x + 106, y, screenInfo->size.x, 13, 0x000000, 0xFF, INK_NONE, true);
 }
 
 void PauseMenu::DrawSpikes()
 {
     for (int32 i = 0; i < 8; i++) {
-        animator.DrawSprite(&drawPos, true);
-        drawPos.y += TO_FIXED(32);
+        this->animator.DrawSprite(&this->drawPos, true);
+        this->drawPos.y += TO_FIXED(32);
     }
 }
 
@@ -168,11 +168,11 @@ void PauseMenu::Action_Accept()
 {
     modSVars->sfxAccept.Play();
 
-    state.Set(&PauseMenu::State_Confirmed);
-    stateDraw.Set(&PauseMenu::Draw_Confirmed);
+    this->state.Set(&PauseMenu::State_Confirmed);
+    this->stateDraw.Set(&PauseMenu::Draw_Confirmed);
 
-    alpha = 0xF8;
-    timer = 0;
+    this->alpha = 0xF8;
+    this->timer = 0;
 }
 
 void PauseMenu::Action_TouchButton(int32 buttonIndex, int32 y)
@@ -181,16 +181,16 @@ void PauseMenu::Action_TouchButton(int32 buttonIndex, int32 y)
         return;
 
     if (Touch::CheckRect(lineX, y, screenInfo->size.x, y + 32, nullptr, nullptr) > -1) {
-        selectedIndex = buttonIndex;
+        this->selectedIndex = buttonIndex;
         return;
     }
 
     if (CheckAnyTouch() < 0) {
-        if (selectedIndex == buttonIndex)
-            Action_Accept();
+        if (this->selectedIndex == buttonIndex)
+            this->Action_Accept();
     }
-    else if (selectedIndex == buttonIndex) {
-        selectedIndex = Buttons::MenuUnselected;
+    else if (this->selectedIndex == buttonIndex) {
+        this->selectedIndex = Buttons::MenuUnselected;
     }
 }
 
@@ -201,17 +201,17 @@ void PauseMenu::State_StartPause()
 
     auto player = GameObject::Get<Player>(SLOT_PLAYER1);
 
-    PauseSound();
+    this->PauseSound();
     Stage::SetEngineState(ENGINESTATE_FROZEN);
     modSVars->sfxWoosh.Play();
 
-    position.x = screenInfo->size.x;
-    lineX      = screenInfo->size.x + 6;
-    timer      = 0;
-    alpha      = 0;
+    this->position.x = screenInfo->size.x;
+    this->lineX      = screenInfo->size.x + 6;
+    this->timer      = 0;
+    this->alpha      = 0;
 
     // TODO: Add language switch for this(?)
-    timerThreshold = 12;
+    this->timerThreshold = 12;
 
     // 2 = StageCategoryCompetition
     // 4 = StageCategoryBonus
@@ -219,29 +219,29 @@ void PauseMenu::State_StartPause()
 
     bool32 blockedCategories = sceneInfo->activeCategory == 2 || sceneInfo->activeCategory == 5 || sceneInfo->activeCategory == 4;
     if (player->lives <= 1 || blockedCategories)
-        disableRestart = true;
+        this->disableRestart = true;
     else
-        disableRestart = false;
+        this->disableRestart = false;
 
     if (config.hasTouchControls)
-        selectedIndex = Buttons::MenuUnselected;
+        this->selectedIndex = Buttons::MenuUnselected;
 
-    state.Set(&PauseMenu::State_SlideIn);
-    stateDraw.Set(&PauseMenu::Draw_Init);
+    this->state.Set(&PauseMenu::State_SlideIn);
+    this->stateDraw.Set(&PauseMenu::Draw_Init);
 }
 
 void PauseMenu::State_SlideIn()
 {
     SET_CURRENT_STATE();
 
-    pauseBarPos.x = (timer * screenInfo->size.x) / 12;
-    pauseBarPos.y = (timer * screenInfo->size.y) / 12;
-    position.x    = screenInfo->size.x - (timer << 7) / 12;
+    this->pauseBarPos.x = (this->timer * screenInfo->size.x) / 12;
+    this->pauseBarPos.y = (this->timer * screenInfo->size.y) / 12;
+    this->position.x    = screenInfo->size.x - (this->timer << 7) / 12;
 
-    if (timer++ >= timerThreshold) {
-        timer = 0;
-        lineX = (position.x + 48);
-        state.Set(&PauseMenu::State_SpritesFadeIn);
+    if (this->timer++ >= this->timerThreshold) {
+        this->timer = 0;
+        this->lineX = (this->position.x + 48);
+        this->state.Set(&PauseMenu::State_SpritesFadeIn);
     }
 }
 
@@ -249,15 +249,15 @@ void PauseMenu::State_SpritesFadeIn()
 {
     SET_CURRENT_STATE();
 
-    if (timer <= 0xFF) {
-        timer += 16;
-        alpha = (timer < 0xFF) ? timer : 0xFF;
+    if (this->timer <= 0xFF) {
+        this->timer += 16;
+        this->alpha = (this->timer < 0xFF) ? this->timer : 0xFF;
     }
     else {
-        timer = 0;
-        alpha = 0xFF;
-        state.Set(&PauseMenu::State_Controls);
-        stateDraw.Set(&PauseMenu::Draw_Controls);
+        this->timer = 0;
+        this->alpha = 0xFF;
+        this->state.Set(&PauseMenu::State_Controls);
+        this->stateDraw.Set(&PauseMenu::Draw_Controls);
     }
 }
 
@@ -265,48 +265,48 @@ void PauseMenu::State_Controls()
 {
     SET_CURRENT_STATE();
 
-    if (config.hasTouchControls && !physicalControls) {
-        Action_TouchButton(Buttons::ButtonContinue, 32);
+    if (config.hasTouchControls && !this->physicalControls) {
+        this->Action_TouchButton(Buttons::ButtonContinue, 32);
 
-        if (!disableRestart)
-            Action_TouchButton(Buttons::ButtonRestart, 80);
+        if (!this->disableRestart)
+            this->Action_TouchButton(Buttons::ButtonRestart, 80);
 
-        Action_TouchButton(2, 128);
-        Action_TouchButton(Buttons::ButtonExit, 176);
+        this->Action_TouchButton(2, 128);
+        this->Action_TouchButton(Buttons::ButtonExit, 176);
 
-        if (up || down) {
-            up ? selectedIndex = Buttons::ButtonExit : false;
-            down ? selectedIndex = Buttons::ButtonContinue : false;
+        if (this->up || this->down) {
+            this->up ? this->selectedIndex = Buttons::ButtonExit : false;
+            this->down ? this->selectedIndex = Buttons::ButtonContinue : false;
 
-            physicalControls = true;
+            this->physicalControls = true;
         }
     }
     else {
-        if (up || down) {
-            timer = 0;
-            lineX = screenInfo->size.x;
+        if (this->up || this->down) {
+            this->timer = 0;
+            this->lineX = screenInfo->size.x;
             modSVars->sfxBleep.Play();
         }
 
-        if (up) {
-            --selectedIndex;
-            if (disableRestart && selectedIndex == Buttons::ButtonRestart)
-                selectedIndex--;
+        if (this->up) {
+            --this->selectedIndex;
+            if (this->disableRestart && this->selectedIndex == Buttons::ButtonRestart)
+                this->selectedIndex--;
         }
-        if (down) {
-            ++selectedIndex;
-            if (disableRestart && selectedIndex == Buttons::ButtonRestart)
-                selectedIndex++;
+        if (this->down) {
+            ++this->selectedIndex;
+            if (this->disableRestart && this->selectedIndex == Buttons::ButtonRestart)
+                this->selectedIndex++;
         }
 
-        selectedIndex &= 3;
+        this->selectedIndex &= 3;
 
-        if (start)
-            Action_Accept();
+        if (this->start)
+            this->Action_Accept();
 
         if (config.hasTouchControls && CheckAnyTouch() > -1) {
-            physicalControls = false;
-            selectedIndex    = Buttons::MenuUnselected;
+            this->physicalControls = false;
+            this->selectedIndex    = Buttons::MenuUnselected;
         }
     }
 }
@@ -315,23 +315,23 @@ void PauseMenu::State_Confirmed()
 {
     SET_CURRENT_STATE();
 
-    lineX += 4;
+    this->lineX += 4;
 
-    timer += 1;
-    timer &= 3;
+    this->timer += 1;
+    this->timer &= 3;
 
-    (alpha > 0) ? alpha -= 12 : alpha = 0;
+    (this->alpha > 0) ? this->alpha -= 12 : this->alpha = 0;
 
-    if (!alpha) {
+    if (!this->alpha) {
         // Check for Resume (and options for now)
-        if (selectedIndex == Buttons::MenuUnselected || selectedIndex == Buttons::ButtonContinue || selectedIndex == 2) {
-            lineX         = position.x + 48;
-            pauseBarPos.y = screenInfo->size.y - 38;
+        if (this->selectedIndex == Buttons::MenuUnselected || this->selectedIndex == Buttons::ButtonContinue || this->selectedIndex == 2) {
+            this->lineX         = this->position.x + 48;
+            this->pauseBarPos.y = screenInfo->size.y - 38;
 
-            timer = 0;
-            alpha = backgroundAlpha; // Used for the BG, return to the initial opacity and then fade out
-            state.Set(&PauseMenu::State_ResumeGame);
-            stateDraw.Set(&PauseMenu::Draw_ResumeGame);
+            this->timer = 0;
+            this->alpha = this->backgroundAlpha; // Used for the BG, return to the initial opacity and then fade out
+            this->state.Set(&PauseMenu::State_ResumeGame);
+            this->stateDraw.Set(&PauseMenu::Draw_ResumeGame);
             Stage::SetEngineState(ENGINESTATE_REGULAR);
         }
         else {
@@ -349,9 +349,9 @@ void PauseMenu::State_Confirmed()
 
             // Music::Stop();
 
-            lineX = position.x + 48;
-            state.Set(&PauseMenu::State_ExitLevel);
-            stateDraw.Set(&PauseMenu::Draw_ExitLevel);
+            this->lineX = this->position.x + 48;
+            this->state.Set(&PauseMenu::State_ExitLevel);
+            this->stateDraw.Set(&PauseMenu::Draw_ExitLevel);
         }
     }
 }
@@ -360,15 +360,15 @@ void PauseMenu::State_ResumeGame()
 {
     SET_CURRENT_STATE();
 
-    if (alpha > 0) {
-        alpha -= 8;
-        position.x += 16;
-        lineX += 16;
-        pauseBarPos.y += 16;
+    if (this->alpha > 0) {
+        this->alpha -= 8;
+        this->position.x += 16;
+        this->lineX += 16;
+        this->pauseBarPos.y += 16;
     }
     else {
-        ResumeSound();
-        Destroy();
+        this->ResumeSound();
+        this->Destroy();
     }
 }
 
@@ -376,12 +376,12 @@ void PauseMenu::State_ExitLevel()
 {
     SET_CURRENT_STATE();
 
-    if (position.x > -64) {
-        position.x -= 16;
-        lineX += 16;
+    if (this->position.x > -64) {
+        this->position.x -= 16;
+        this->lineX += 16;
     }
     else {
-        switch (selectedIndex) {
+        switch (this->selectedIndex) {
             // Continue - Do nothing
             case Buttons::ButtonContinue: break;
             case Buttons::ButtonRestart: Stage::LoadScene(); break;
@@ -413,111 +413,110 @@ void PauseMenu::Draw_Init()
 {
     SET_CURRENT_STATE();
 
-    inkEffect = INK_NONE;
+    this->inkEffect = INK_NONE;
 
-    if (pauseBarHeight < SCREEN_YSIZE && pauseBarPos.y > pauseBarHeight) {
-        pauseBarHeight = pauseBarPos.y;
+    if (this->pauseBarHeight<SCREEN_YSIZE &&this->pauseBarPos.y> this->pauseBarHeight) {
+        this->pauseBarHeight = this->pauseBarPos.y;
     }
 
-    Draw_Controls();
+    this->Draw_Controls();
 }
 
 void PauseMenu::Draw_Controls()
 {
     SET_CURRENT_STATE();
 
-    inkEffect = INK_NONE;
+    this->inkEffect = INK_NONE;
 
     // Background fade
-    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, pauseBarHeight, 0x000000, backgroundAlpha, INK_ALPHA, true);
+    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, this->pauseBarHeight, 0x000000, this->backgroundAlpha, INK_ALPHA, true);
 
     // 'PAUSE' bar
-    DrawPauseRect(screenInfo->size.y - 38);
+    this->DrawPauseRect(screenInfo->size.y - 38);
 
     // Spikes
-    animator.frameID = 3;
-    drawPos.x        = TO_FIXED(position.x);
-    drawPos.y        = 0;
-    DrawSpikes();
+    this->animator.frameID = 3;
+    this->drawPos.x        = TO_FIXED(this->position.x);
+    this->drawPos.y        = 0;
+    this->DrawSpikes();
 
-    inkEffect = INK_ALPHA; // eh
-
-    if (lineX > position.x + 48) {
-        lineX += (position.x + 48 - lineX) >> 3;
+    this->inkEffect = INK_ALPHA;
+    if (this->lineX > this->position.x + 48) {
+        this->lineX += (this->position.x + 48 - this->lineX) >> 3;
     }
 
     // Draw 'CONTINUE' button
-    animator.frameID = 6;
-    drawPos.x        = TO_FIXED(position.x + 48);
-    drawPos.y        = TO_FIXED(48);
-    animator.DrawSprite(&drawPos, true);
+    this->animator.frameID = 6;
+    this->drawPos.x        = TO_FIXED(this->position.x + 48);
+    this->drawPos.y        = TO_FIXED(48);
+    this->animator.DrawSprite(&this->drawPos, true);
 
-    if (selectedIndex == Buttons::ButtonContinue) {
+    if (this->selectedIndex == Buttons::ButtonContinue) {
         // Selection Line
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 
     // Draw 'RESTART' button
-    animator.frameID = 7;
-    drawPos.x        = TO_FIXED(position.x + 48);
-    drawPos.y += TO_FIXED(48);
+    this->animator.frameID = 7;
+    this->drawPos.x        = TO_FIXED(this->position.x + 48);
+    this->drawPos.y += TO_FIXED(48);
 
-    if (!disableRestart) {
-        animator.DrawSprite(&drawPos, true);
+    if (!this->disableRestart) {
+        this->animator.DrawSprite(&this->drawPos, true);
     }
     else {
-        alpha >>= 1;
-        animator.DrawSprite(&drawPos, true);
-        alpha <<= 1;
+        this->alpha >>= 1;
+        this->animator.DrawSprite(&this->drawPos, true);
+        this->alpha <<= 1;
     }
 
-    if (selectedIndex == Buttons::ButtonRestart) {
+    if (this->selectedIndex == Buttons::ButtonRestart) {
         // Selection Line
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 
     // Draw 'OPTIONS' button
-    animator.frameID = 8;
-    drawPos.y += TO_FIXED(48);
-    animator.DrawSprite(&drawPos, true);
+    this->animator.frameID = 8;
+    this->drawPos.y += TO_FIXED(48);
+    this->animator.DrawSprite(&this->drawPos, true);
 
-    if (selectedIndex == 2) {
+    if (this->selectedIndex == 2) {
         // Selection Line
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 
     // Draw 'EXIT' button
-    animator.frameID = 9;
-    drawPos.y += TO_FIXED(48);
-    animator.DrawSprite(&drawPos, true);
+    this->animator.frameID = 9;
+    this->drawPos.y += TO_FIXED(48);
+    this->animator.DrawSprite(&this->drawPos, true);
 
-    if (selectedIndex == Buttons::ButtonExit) {
+    if (this->selectedIndex == Buttons::ButtonExit) {
         // Selection Line
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 }
 
@@ -525,143 +524,143 @@ void PauseMenu::Draw_Confirmed()
 {
     SET_CURRENT_STATE();
 
-    inkEffect = INK_NONE;
+    this->inkEffect = INK_NONE;
 
     // Background fade
-    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, pauseBarHeight, 0x000000, backgroundAlpha, INK_ALPHA, true);
+    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, this->pauseBarHeight, 0x000000, this->backgroundAlpha, INK_ALPHA, true);
 
     // 'PAUSE' bar
-    DrawPauseRect(screenInfo->size.y - 38);
+    this->DrawPauseRect(screenInfo->size.y - 38);
 
-    animator.frameID = 3;
-    drawPos.x        = TO_FIXED(position.x);
-    drawPos.y        = 0;
-    DrawSpikes();
+    this->animator.frameID = 3;
+    this->drawPos.x        = TO_FIXED(this->position.x);
+    this->drawPos.y        = 0;
+    this->DrawSpikes();
 
     // Continue
-    drawPos.y = TO_FIXED(48);
-    if (selectedIndex != Buttons::ButtonContinue) {
-        inkEffect        = INK_ALPHA;
-        animator.frameID = 6;
-        drawPos.x        = TO_FIXED(position.x + 48);
-        animator.DrawSprite(&drawPos, true);
+    this->drawPos.y = TO_FIXED(48);
+    if (this->selectedIndex != Buttons::ButtonContinue) {
+        this->inkEffect        = INK_ALPHA;
+        this->animator.frameID = 6;
+        this->drawPos.x        = TO_FIXED(this->position.x + 48);
+        this->animator.DrawSprite(&this->drawPos, true);
     }
     // Continue (Selected)
     else {
         // Continue flash
-        if (timer < 2) {
-            inkEffect        = INK_NONE;
-            animator.frameID = 6;
-            drawPos.x        = TO_FIXED(position.x + 48);
-            animator.DrawSprite(&drawPos, true);
+        if (this->timer < 2) {
+            this->inkEffect        = INK_NONE;
+            this->animator.frameID = 6;
+            this->drawPos.x        = TO_FIXED(this->position.x + 48);
+            this->animator.DrawSprite(&this->drawPos, true);
         }
 
         // Selection Line
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 
     // Restart
-    drawPos.y += TO_FIXED(48);
-    if (selectedIndex != Buttons::ButtonRestart) {
-        if (!disableRestart) {
-            inkEffect        = INK_ALPHA;
-            animator.frameID = 7;
-            drawPos.x        = TO_FIXED(position.x + 48);
-            animator.DrawSprite(&drawPos, true);
+    this->drawPos.y += TO_FIXED(48);
+    if (this->selectedIndex != Buttons::ButtonRestart) {
+        if (!this->disableRestart) {
+            this->inkEffect        = INK_ALPHA;
+            this->animator.frameID = 7;
+            this->drawPos.x        = TO_FIXED(this->position.x + 48);
+            this->animator.DrawSprite(&this->drawPos, true);
         }
         else {
-            inkEffect = INK_ALPHA;
-            drawPos.x = TO_FIXED(position.x + 48);
+            this->inkEffect = INK_ALPHA;
+            this->drawPos.x = TO_FIXED(this->position.x + 48);
 
-            alpha >>= 1;
-            animator.frameID = 7;
-            animator.DrawSprite(&drawPos, true);
-            alpha <<= 1;
+            this->alpha >>= 1;
+            this->animator.frameID = 7;
+            this->animator.DrawSprite(&this->drawPos, true);
+            this->alpha <<= 1;
         }
     }
     // Restart (Selected)
     else {
         // Restart flash
-        if (timer < 2) {
-            inkEffect        = INK_NONE;
-            drawPos.x        = TO_FIXED(position.x + 48);
-            animator.frameID = 7;
-            animator.DrawSprite(&drawPos, true);
+        if (this->timer < 2) {
+            this->inkEffect        = INK_NONE;
+            this->drawPos.x        = TO_FIXED(this->position.x + 48);
+            this->animator.frameID = 7;
+            this->animator.DrawSprite(&this->drawPos, true);
         }
 
         // Selection Line
-        inkEffect        = INK_NONE;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.frameID = 5;
-        animator.DrawSprite(&drawPos, true);
+        this->inkEffect        = INK_NONE;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.frameID = 5;
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 
     // Options
-    drawPos.y += TO_FIXED(48);
-    if (selectedIndex != 2) {
-        inkEffect        = INK_ALPHA;
-        animator.frameID = 8;
-        drawPos.x        = TO_FIXED(position.x + 48);
-        animator.DrawSprite(&drawPos, true);
+    this->drawPos.y += TO_FIXED(48);
+    if (this->selectedIndex != 2) {
+        this->inkEffect        = INK_ALPHA;
+        this->animator.frameID = 8;
+        this->drawPos.x        = TO_FIXED(this->position.x + 48);
+        this->animator.DrawSprite(&this->drawPos, true);
     }
     // Options (Selected)
     else {
         // Options flash
-        if (timer < 2) {
-            inkEffect        = INK_NONE;
-            animator.frameID = 8;
-            drawPos.x        = TO_FIXED(position.x + 48);
-            animator.DrawSprite(&drawPos, true);
+        if (this->timer < 2) {
+            this->inkEffect        = INK_NONE;
+            this->animator.frameID = 8;
+            this->drawPos.x        = TO_FIXED(this->position.x + 48);
+            this->animator.DrawSprite(&this->drawPos, true);
         }
 
         // Selection Line
-        inkEffect        = INK_NONE;
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->inkEffect        = INK_NONE;
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 
     // Exit
-    drawPos.y += TO_FIXED(48);
-    if (selectedIndex != Buttons::ButtonExit) {
-        inkEffect        = INK_ALPHA;
-        animator.frameID = 9;
-        drawPos.x        = TO_FIXED(position.x + 48);
-        animator.DrawSprite(&drawPos, true);
+    this->drawPos.y += TO_FIXED(48);
+    if (this->selectedIndex != Buttons::ButtonExit) {
+        this->inkEffect        = INK_ALPHA;
+        this->animator.frameID = 9;
+        this->drawPos.x        = TO_FIXED(this->position.x + 48);
+        this->animator.DrawSprite(&this->drawPos, true);
     }
     // Exit (Selected)
     else {
         // Exit flash
-        if (timer < 2) {
-            inkEffect        = INK_NONE;
-            animator.frameID = 9;
-            drawPos.x        = TO_FIXED(position.x + 48);
-            animator.DrawSprite(&drawPos, true);
+        if (this->timer < 2) {
+            this->inkEffect        = INK_NONE;
+            this->animator.frameID = 9;
+            this->drawPos.x        = TO_FIXED(this->position.x + 48);
+            this->animator.DrawSprite(&this->drawPos, true);
         }
 
         // Selection Line
-        inkEffect        = INK_NONE;
-        animator.frameID = 5;
-        drawPos.x        = TO_FIXED(lineX);
-        animator.DrawSprite(&drawPos, true);
+        this->inkEffect        = INK_NONE;
+        this->animator.frameID = 5;
+        this->drawPos.x        = TO_FIXED(this->lineX);
+        this->animator.DrawSprite(&this->drawPos, true);
 
         // Selection Player
-        drawPos.x = TO_FIXED(position.x + 48);
-        selectionAnimator.DrawSprite(&drawPos, true);
+        this->drawPos.x = TO_FIXED(this->position.x + 48);
+        this->selectionAnimator.DrawSprite(&this->drawPos, true);
     }
 }
 
@@ -669,55 +668,55 @@ void PauseMenu::Draw_ResumeGame()
 {
     SET_CURRENT_STATE();
 
-    inkEffect = INK_NONE;
+    this->inkEffect = INK_NONE;
 
     // Background fade
-    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, pauseBarHeight, 0x000000, alpha, INK_ALPHA, true);
+    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, this->pauseBarHeight, 0x000000, this->alpha, INK_ALPHA, true);
 
     // 'PAUSE' bar
-    DrawPauseRect(pauseBarPos.y);
+    this->DrawPauseRect(this->pauseBarPos.y);
 
-    animator.frameID = 3;
-    drawPos.x        = TO_FIXED(position.x);
-    drawPos.y        = 0;
-    DrawSpikes();
+    this->animator.frameID = 3;
+    this->drawPos.x        = TO_FIXED(this->position.x);
+    this->drawPos.y        = 0;
+    this->DrawSpikes();
 
     switch (selectedIndex) {
         case Buttons::ButtonContinue:
-            animator.frameID = 6;
-            drawPos.x        = TO_FIXED(lineX);
-            drawPos.y        = TO_FIXED(48);
-            animator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 6;
+            this->drawPos.x        = TO_FIXED(this->lineX);
+            this->drawPos.y        = TO_FIXED(48);
+            this->animator.DrawSprite(&this->drawPos, true);
 
-            drawPos.x = TO_FIXED(position.x + 48);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->drawPos.x = TO_FIXED(this->position.x + 48);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
         case Buttons::ButtonRestart:
-            animator.frameID = 7;
-            drawPos.x        = TO_FIXED(lineX);
-            drawPos.y        = TO_FIXED(96);
-            animator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 7;
+            this->drawPos.x        = TO_FIXED(this->lineX);
+            this->drawPos.y        = TO_FIXED(96);
+            this->animator.DrawSprite(&this->drawPos, true);
 
-            drawPos.x = TO_FIXED(position.x + 48);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->drawPos.x = TO_FIXED(this->position.x + 48);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
         case 2: // Options
-            animator.frameID = 8;
-            drawPos.x        = TO_FIXED(lineX);
-            drawPos.y        = TO_FIXED(144);
-            animator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 8;
+            this->drawPos.x        = TO_FIXED(lineX);
+            this->drawPos.y        = TO_FIXED(144);
+            animator.DrawSprite(&this->drawPos, true);
 
-            drawPos.x = TO_FIXED(position.x + 48);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->drawPos.x = TO_FIXED(this->position.x + 48);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
         case Buttons::ButtonExit:
-            animator.frameID = 9;
-            drawPos.x        = TO_FIXED(lineX);
-            drawPos.y        = TO_FIXED(192);
-            animator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 9;
+            this->drawPos.x        = TO_FIXED(this->lineX);
+            this->drawPos.y        = TO_FIXED(192);
+            this->animator.DrawSprite(&this->drawPos, true);
 
-            drawPos.x = TO_FIXED(position.x + 48);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->drawPos.x = TO_FIXED(this->position.x + 48);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
     }
 }
@@ -726,47 +725,47 @@ void PauseMenu::Draw_ExitLevel()
 {
     SET_CURRENT_STATE();
 
-    inkEffect = INK_NONE;
+    this->inkEffect = INK_NONE;
 
     // Background fade
-    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, pauseBarHeight, 0x000000, backgroundAlpha, INK_ALPHA, true);
+    Graphics::DrawRect(NULL, NULL, screenInfo->size.x, this->pauseBarHeight, 0x000000, this->backgroundAlpha, INK_ALPHA, true);
 
     // 'PAUSE' bar
-    DrawPauseRect(screenInfo->size.y - 38);
+    this->DrawPauseRect(screenInfo->size.y - 38);
 
-    animator.frameID = 3;
-    drawPos.x        = TO_FIXED(position.x);
-    drawPos.y        = 0;
-    DrawSpikes();
+    this->animator.frameID = 3;
+    this->drawPos.x        = TO_FIXED(this->position.x);
+    this->drawPos.y        = 0;
+    this->DrawSpikes();
 
     // The rectangle that consumes all life
-    Graphics::DrawRect(position.x + 128, 0, screenInfo->size.x * 47, screenInfo->size.y, 0x000000, 0xFF, INK_NONE, true);
+    Graphics::DrawRect(this->position.x + 128, 0, screenInfo->size.x * 47, screenInfo->size.y, 0x000000, 0xFF, INK_NONE, true);
 
-    drawPos.x = TO_FIXED(lineX);
+    this->drawPos.x = TO_FIXED(this->lineX);
     switch (selectedIndex) {
         case Buttons::ButtonContinue:
-            animator.frameID = 6;
-            drawPos.y        = TO_FIXED(48);
-            animator.DrawSprite(&drawPos, true);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 6;
+            this->drawPos.y        = TO_FIXED(48);
+            this->animator.DrawSprite(&this->drawPos, true);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
         case Buttons::ButtonRestart:
-            animator.frameID = 7;
-            drawPos.y        = TO_FIXED(96);
-            animator.DrawSprite(&drawPos, true);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 7;
+            this->drawPos.y  = TO_FIXED(96);
+            this->animator.DrawSprite(&this->drawPos, true);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
         case 2: // Options
-            animator.frameID = 8;
-            drawPos.y        = TO_FIXED(144);
-            animator.DrawSprite(&drawPos, true);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 8;
+            this->drawPos.y  = TO_FIXED(144);
+            this->animator.DrawSprite(&this->drawPos, true);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
         case Buttons::ButtonExit:
-            animator.frameID = 9;
-            drawPos.y        = TO_FIXED(192);
-            animator.DrawSprite(&drawPos, true);
-            selectionAnimator.DrawSprite(&drawPos, true);
+            this->animator.frameID = 9;
+            this->drawPos.y  = TO_FIXED(192);
+            this->animator.DrawSprite(&this->drawPos, true);
+            this->selectionAnimator.DrawSprite(&this->drawPos, true);
             break;
     }
 }

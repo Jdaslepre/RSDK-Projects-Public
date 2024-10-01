@@ -1,8 +1,4 @@
-﻿// ---------------
-// Engine Versions
-// ---------------
-
-// ... stuff
+﻿global using size_t = uint;
 
 namespace RSDK
 {

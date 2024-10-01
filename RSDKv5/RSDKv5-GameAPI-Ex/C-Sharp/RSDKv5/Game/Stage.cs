@@ -17,6 +17,10 @@ namespace RSDK
         ENGINESTATE_ERRORMSG_FATAL,
 #endif
         ENGINESTATE_NONE,
+#if RETRO_REV0U
+        // Prolly origins-only, called by the ending so I assume this handles playing ending movies and returning to menu
+        ENGINESTATE_GAME_FINISHED,
+#endif
     }
 
     public struct SceneListInfo

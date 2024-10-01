@@ -38,7 +38,7 @@ namespace RSDK
     {
         public ushort aniFrames;
 
-        public void Init() { unchecked { aniFrames = (ushort)-1; } }
+        public void Init() => aniFrames = unchecked((ushort)-1);
 
         public void Load(string path, Scopes scope) => aniFrames = RSDKTable.LoadSpriteAnimation(path, (byte)scope);
         public void Create(string filename, uint frameCount, uint listCount, Scopes scope) => aniFrames = RSDKTable.CreateSpriteAnimation(filename, frameCount, listCount, (byte)scope);
@@ -47,7 +47,7 @@ namespace RSDK
 
         public ushort FindAnimation(string name) { return RSDKTable.FindSpriteAnimation(aniFrames, name); }
 
-        public bool32 Loaded() { unchecked { return aniFrames != (ushort)-1; } }
+        public bool32 Loaded() { return aniFrames != unchecked((ushort)-1); }
 
         public RSDK.SpriteFrame* GetFrame(int animID, int frameID) { return RSDKTable.GetFrame(aniFrames, (ushort)animID, frameID); }
 

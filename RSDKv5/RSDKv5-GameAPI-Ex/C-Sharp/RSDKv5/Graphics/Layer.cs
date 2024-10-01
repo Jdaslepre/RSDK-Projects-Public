@@ -1,4 +1,6 @@
-﻿using static RSDK.EngineAPI;
+﻿using System.Xml.Linq;
+using System;
+using static RSDK.EngineAPI;
 
 namespace RSDK
 {
@@ -74,7 +76,7 @@ namespace RSDK
         public int deformationOffsetW;
         public int[] deformationData = new int[0x400];
         public int[] deformationDataW = new int[0x400];
-        public delegate* unmanaged<RSDK.ScanlineInfo*> scanlineCallback;
+        public delegate* unmanaged<RSDK.ScanlineInfo*, void> scanlineCallback;
         public ushort scrollInfoCount;
         public RSDK.ScrollInfo[] scrollInfo = new RSDK.ScrollInfo[0x100];
         public uint[] name = new uint[4];
@@ -109,10 +111,21 @@ namespace RSDK
                 return id == unchecked((ushort)-1);
         }
 
-        public RSDK.TileLayer *GetTileLayer() { return RSDKTable.GetTileLayer(id); }
+        public RSDK.TileLayer* GetTileLayer() { return RSDKTable.GetTileLayer(id); }
         public void Size(RSDK.Vector2* size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, size, usePixelUnits);
 
         public RSDK.Tile GetTile(int x, int y) { return new RSDK.Tile(RSDKTable.GetTile(id, x, y)); }
         public void SetTile(int x, int y, RSDK.Tile tile) => RSDKTable.SetTile(id, x, y, tile.id);
+
+        public static RSDK.TileLayer* GetTileLayer(string name)
+        {
+            return RSDKTable.GetTileLayer(RSDKTable.GetTileLayerID(name));
+        }
+        public static RSDK.TileLayer* GetTileLayer(ushort id) { return RSDKTable.GetTileLayer(id); }
+        public static void Copy(RSDK.SceneLayer dstLayer, int dstStartX, int dstStartY, RSDK.SceneLayer srcLayer, int srcStartX, int srcStartY,
+                                int countX, int countY)
+        {
+            RSDKTable.CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
+        }
     }
 }

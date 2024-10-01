@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RSDK
 {
-    internal class Const
+    public class Const
     {
         // RSDKv5/EngineAPI.cs
         public const int SCREEN_XMAX = 1280;
