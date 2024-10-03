@@ -94,18 +94,6 @@ public struct SceneLayer
 	public void Get(char8* name) mut => id = RSDKTable.GetTileLayerID(name);
 	public void Set(uint16 ID) mut => id = ID;
 
-
-	public bool Loaded() mut
-	{
-		return id != (uint16) - 1;
-	}
-
-	public bool Matches(RSDK.SceneLayer other) { return this.id == other.id; }
-	public bool Matches(RSDK.SceneLayer* other)
-	{
-		return other != null ? id == other.id : id == (.)(-1);
-	}
-
 	public RSDK.TileLayer* GetTileLayer() { return RSDKTable.GetTileLayer(id); }
 
 	public void Size(RSDK.Vector2* size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, size, usePixelUnits);
@@ -121,4 +109,16 @@ public struct SceneLayer
 	{
 		RSDKTable.CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
 	}
+
+	public bool32 Loaded()
+	{
+		return id != (.)(-1);
+	}
+
+	public bool32 Matches(RSDK.SceneLayer other) { return id == other.id; }
+	public bool32 Matches(RSDK.SceneLayer* other)
+	{
+		return other != null ? id == other.id : id == (.)(-1);
+	}
+
 }

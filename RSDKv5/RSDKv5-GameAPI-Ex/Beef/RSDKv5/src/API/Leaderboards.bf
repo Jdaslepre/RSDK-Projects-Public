@@ -37,7 +37,7 @@ namespace RSDK
 
 namespace API
 {
-	public class Leaderboards
+	public static class Leaderboards
 	{
 #if RETRO_USE_EGS
 		public static bool32 CheckEnabled() { return APITable.CheckLeaderboardsEnabled(); }

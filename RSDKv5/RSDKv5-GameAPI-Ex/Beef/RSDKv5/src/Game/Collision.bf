@@ -4,7 +4,7 @@ namespace RSDK;
 
 public enum CollisionModes : uint8 { CMODE_FLOOR, CMODE_LWALL, CMODE_ROOF, CMODE_RWALL }
 
-public enum CollisionSides { C_NONE, C_TOP, C_LEFT, C_RIGHT, C_BOTTOM }
+public enum CollisionSides : uint8 { C_NONE, C_TOP, C_LEFT, C_RIGHT, C_BOTTOM }
 
 public struct Hitbox
 {
@@ -65,10 +65,10 @@ public struct CollisionSensor {
 	public uint8 flag;
 }
 
-public class Collision
+public static class Collision
 {
 #if RETRO_REV0U
-	public void SetupCollisionConfig(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
+	public static void SetupCollisionConfig(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
 									 uint8 roofAngleTolerance)
 	{
 		RSDKTable.SetupCollisionConfig(minDistance, lowTolerance, highTolerance, floorAngleTolerance, wallAngleTolerance, roofAngleTolerance);
@@ -76,10 +76,10 @@ public class Collision
 #endif
 
 #if RETRO_REV0U
-	public void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) => RSDKTable.CopyCollisionMask(dst, src, cPlane, cMode);
-	public void GetCollisionInfo(RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) => RSDKTable.GetCollisionInfo(masks, tileInfo);
+	public static void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) => RSDKTable.CopyCollisionMask(dst, src, cPlane, cMode);
+	public static void GetCollisionInfo(RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) => RSDKTable.GetCollisionInfo(masks, tileInfo);
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
-	public void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) => modTable.CopyCollisionMask(dst, src, cPlane, cMode);
-	public void GetCollisionInfo(RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) => modTable.GetCollisionInfo(masks, tileInfo);
+	public static void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) => modTable.CopyCollisionMask(dst, src, cPlane, cMode);
+	public static void GetCollisionInfo(RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) => modTable.GetCollisionInfo(masks, tileInfo);
 #endif
 }

@@ -33,7 +33,7 @@ public enum PrintMessageTypes
 }
 #endif
 
-public class Dev
+public static class Dev
 {
 #if RETRO_REV02
 	public static void Print(PrintModes severity, char8 *message, ...)

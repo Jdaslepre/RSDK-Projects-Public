@@ -3,16 +3,16 @@ using System;
 namespace RSDK.API
 {
 #if RETRO_REV02
-	public class Auth
+	public static class Auth
 	{
-		public void ClearPrerollErrors() => APITable.ClearPrerollErrors();
-		public void TryAuth() => APITable.TryAuth();
+		public static void ClearPrerollErrors() => APITable.ClearPrerollErrors();
+		public static void TryAuth() => APITable.TryAuth();
 		public static int GetUserAuthStatus() { return APITable.GetUserAuthStatus(); }
 		public static bool32 GetUsername(RSDK.String* username) { return APITable.GetUsername(username); }
 	}
 #endif
 
-	public class Storage
+	public static class Storage
 	{
 		// load user file from game dir
 		public static bool32 LoadFile(char8* fileName, void* buffer, uint32 size) { return RSDKTable.LoadUserFile(fileName, buffer, size); }

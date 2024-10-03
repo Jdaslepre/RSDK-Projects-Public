@@ -9,7 +9,7 @@ namespace RSDK;
 }
 
 namespace RSDK.API;
-public class Achievements
+public static class Achievements
 {
 	public static void TryUnlockAchievement(RSDK.AchievementID *id) => APITable.TryUnlockAchievement(id);
 	public static bool32 GetEnabled() { return APITable.GetAchievementsEnabled(); }

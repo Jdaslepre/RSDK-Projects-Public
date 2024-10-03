@@ -8,7 +8,7 @@ public struct Mesh
 
 	public void Load(char8* path, Scopes scopeType) mut => id = RSDKTable.LoadMesh(path, (.)scopeType);
 
-	public bool32 Loaded() mut { return id != (.)(-1); }
+	public bool32 Loaded() { return id != (.)(-1); }
 
 	public bool32 Matches(RSDK.Mesh other) { return this.id == other.id; }
 	public bool32 Matches(RSDK.Mesh* other)

@@ -12,7 +12,7 @@ namespace RSDK;
 
 namespace RSDK.API;
 	
-public class Stats
+public static class Stats
 {
 	public static void TryTrackStat(RSDK.StatInfo* stat) => APITable.TryTrackStat(stat);
 	public static bool32 GetEnabled() { return APITable.GetStatsEnabled(); }

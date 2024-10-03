@@ -2,7 +2,7 @@ using System;
 
 namespace RSDK;
 
-public enum EngineStates
+public enum EngineStates : uint8
 {
 	ENGINESTATE_LOAD,
 	ENGINESTATE_REGULAR,
@@ -62,7 +62,7 @@ public enum EngineStates
 	public bool32 timeEnabled;
 	public uint8 activeCategory;
 	public uint8 categoryCount;
-	public uint8 state;
+	public EngineStates state;
 #if RETRO_REV02
 	public uint8 filter;
 #endif
@@ -71,7 +71,7 @@ public enum EngineStates
 	public uint8 minutes;
 }
 
-public class Stage
+public static class Stage
 {
 	public static bool32 CheckSceneFolder(char8 *folderName) { return RSDKTable.CheckSceneFolder(folderName); }
 	public static bool32 CheckValidScene() { return RSDKTable.CheckValidScene(); }

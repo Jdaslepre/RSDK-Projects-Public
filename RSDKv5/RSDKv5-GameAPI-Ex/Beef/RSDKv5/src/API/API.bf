@@ -1,6 +1,6 @@
 namespace RSDK.API;
 
-public class API
+public static class API
 {
 #if !RETRO_REV02
 	public static void *GetAPIFunction(char8* funcName) { return RSDKTable.GetAPIFunction(funcName); }

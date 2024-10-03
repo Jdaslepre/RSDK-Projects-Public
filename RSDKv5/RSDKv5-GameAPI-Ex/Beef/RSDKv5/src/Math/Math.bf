@@ -2,7 +2,7 @@ using System;
 
 namespace RSDK;
 
-public class Math
+public static class Math
 {
 	public static T MIN<T>(T a, T b) where T : var, IInteger
 	{

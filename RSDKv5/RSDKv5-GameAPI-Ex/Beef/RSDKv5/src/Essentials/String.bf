@@ -1,22 +1,13 @@
+using System;
+
 namespace RSDK;
 
 public struct String
 {
 	public this() { }
 
-	public this(RSDK.String other)
-	{
-		chars  = other.chars;
-		length = other.length;
-		size   = other.size;
-	}
-
-	public this(RSDK.String *other)
-	{
-		chars  = other.chars;
-		length = other.length;
-		size   = other.size;
-	}
+	public this(ref RSDK.String other) => Internal.MemCpy(&this, &other, sizeof(RSDK.String));
+	public this(RSDK.String *other) => Internal.MemCpy(&this, other, sizeof(RSDK.String));
 
 	public void Init(char8 *str, uint32 length = 0) mut => RSDKTable.InitString(&this, str, length);
 	public void Set(char8 *str) mut => RSDKTable.SetString(&this, str);
@@ -27,8 +18,8 @@ public struct String
 
 	public void CStr(char8 *buffer) mut => RSDKTable.GetCString(buffer, &this);
 
-	public bool Initialized() { return chars != null; }
-	public bool Empty() { return length == 0; }
+	public bool32 Initialized() { return chars != null; }
+	public bool32 Empty() { return length == 0; }
 
 	public void SetSpriteString(RSDK.SpriteAnimation aniFrames, uint16 listID) mut => RSDKTable.SetSpriteString(aniFrames.aniFrames, listID, &this);
 	public int32 GetWidth(RSDK.SpriteAnimation aniFrames, uint16 listID, int32 spacing) mut

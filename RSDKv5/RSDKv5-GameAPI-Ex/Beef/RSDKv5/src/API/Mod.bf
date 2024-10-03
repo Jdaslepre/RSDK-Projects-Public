@@ -52,7 +52,7 @@ static
 	// Misc
 	public static void* GetGlobals() { return modTable.GetGlobals(); }
 
-	public class List
+	public static class List
 	{
 	    public static bool32 LoadModInfo(char8* id, RSDK.String* name, RSDK.String* description, RSDK.String* version, bool32* active) { return modTable.LoadModInfo(id, name, description, version, active); }
 	    public static void GetModPath(char8* id, RSDK.String* result) => modTable.GetModPath(id, result);
@@ -60,7 +60,7 @@ static
 	    public static char8* GetModIDByIndex(bool32 index) { return modTable.GetModIDByIndex(index); }
 	}
 
-	public class Achievements
+	public static class Achievements
 	{
 	    public static void Register(char8* identifier, char8* name, char8* desc) => modTable.RegisterAchievement(identifier, name, desc);
 	    public static void GetInfo(uint32 id, RSDK.String* name, RSDK.String* description, RSDK.String* identifier, bool32* achieved) => modTable.GetAchievementInfo(id, name, description, identifier, achieved);
@@ -69,7 +69,7 @@ static
 	}
 
 
-	public class Settings
+	public static class Settings
 	{
 	    public static bool32 GetBool(char8* id, char8* key, bool32 fallback) { return modTable.GetSettingsBool(id, key, fallback); }
 	    public static int GetInteger(char8* id, char8* key, int32 fallback) { return modTable.GetSettingsInteger(id, key, fallback); }
@@ -82,7 +82,7 @@ static
 	    public static void SaveSettings() => modTable.SaveSettings();
 	}
 
-	public class Config
+	public static class Config
 	{
 	    public static bool32 GetBool(char8* id, bool32 fallback) { return modTable.GetConfigBool(id, fallback); }
 	    public static int GetInteger(char8* id, int32 fallback) { return modTable.GetConfigInteger(id, fallback); }
@@ -91,7 +91,7 @@ static
 	}
 
 #if RETRO_MOD_LOADER_VER_2
-	public class Files
+	public static class Files
 	{
 	    public static bool32 ExcludeFile(char8* id, char8* path) { return modTable.ExcludeFile(id, path); }
 	    public static bool32 ExcludeAllFiles(char8* id) { return modTable.ExcludeAllFiles(id); }
@@ -99,7 +99,7 @@ static
 	    public static bool32 ReloadAllFiles(char8* id) { return modTable.ReloadAllFiles(id); }
 	}
 
-	public class Engine
+	public static class Engine
 	{
 	    public static void* GetSpriteAnimation(uint16 id) { return modTable.GetSpriteAnimation(id); }
 	    public static void* GetSpriteSurface(uint16 id) { return modTable.GetSpriteSurface(id); }

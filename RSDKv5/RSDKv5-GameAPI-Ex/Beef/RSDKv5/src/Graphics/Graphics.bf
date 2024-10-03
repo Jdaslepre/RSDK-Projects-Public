@@ -98,7 +98,7 @@ static
 	public static RSDK.Palette[Const.PALETTE_BANK_COUNT] paletteBank = .();
 }
 
-public class Graphics
+public static class Graphics
 {
 	// Cameras
 	public static void AddCamera(RSDK.Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative)
