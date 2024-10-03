@@ -30,7 +30,7 @@ public struct Vector2
 		y = Y;
 	}
 
-	public bool CheckOnScreen(RSDK.Vector2 *range) mut { return RSDKTable.CheckPosOnScreen(&this, range); }
+	public bool32 CheckOnScreen(RSDK.Vector2 *range) mut { return RSDKTable.CheckPosOnScreen(&this, range); }
 }
 
 public struct Vector2<T> where T : var, IInteger
@@ -55,11 +55,11 @@ public struct Vector2<T> where T : var, IInteger
 	    y = other.y;
 	}
 
-	public this(int32 X, int32 Y)
+	public this(T X, T Y)
 	{
 	 	x = X;
 		y = Y;
 	}
 
-	public bool CheckOnScreen(RSDK.Vector2 *range) mut { return RSDKTable.CheckPosOnScreen((.)&this, range); }
+	public bool32 CheckOnScreen(RSDK.Vector2 *range) mut { return RSDKTable.CheckPosOnScreen((.)&this, range); }
 }

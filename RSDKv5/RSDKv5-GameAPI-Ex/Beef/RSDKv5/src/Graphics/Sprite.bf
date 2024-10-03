@@ -10,10 +10,10 @@ public struct SpriteSheet
 
 	public void Load(char8* path, Scopes scopeType) mut { id = RSDKTable.LoadSpriteSheet(path, (.)scopeType); }
 
-	public bool Loaded() { return id != (.)(-1); }
+	public bool32 Loaded() { return id != (.)(-1); }
 
-	public bool Matches(RSDK.SpriteSheet other) { return this.id == other.id; }
-	public bool Matches(RSDK.SpriteSheet* other)
+	public bool32 Matches(RSDK.SpriteSheet other) { return this.id == other.id; }
+	public bool32 Matches(RSDK.SpriteSheet* other)
 	{
 		return other != null ? id == other.id : id == (.)(-1);
 	}
@@ -45,12 +45,12 @@ public struct SpriteAnimation
 
 	public uint16 FindAnimation(char8* name) { return RSDKTable.FindSpriteAnimation(aniFrames, name); }
 
-	public bool Loaded() { return aniFrames != (.)(-1); }
-
 	public RSDK.SpriteFrame* GetFrame(int32 animID, int32 frameID) { return RSDKTable.GetFrame(aniFrames, (.)animID, frameID); }
 
-	public bool Matches(RSDK.SpriteAnimation other) { return aniFrames == other.aniFrames; }
-	public bool Matches(RSDK.SpriteAnimation* other)
+	public bool32 Loaded() { return aniFrames != (.)(-1); }
+
+	public bool32 Matches(RSDK.SpriteAnimation other) { return aniFrames == other.aniFrames; }
+	public bool32 Matches(RSDK.SpriteAnimation* other)
 	{
 		return other != null ? aniFrames == other.aniFrames : aniFrames == (.)(-1);
 	}

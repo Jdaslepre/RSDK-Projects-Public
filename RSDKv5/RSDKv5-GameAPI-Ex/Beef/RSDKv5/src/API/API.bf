@@ -27,4 +27,5 @@ public class API
 	public static int32 GetConnectingStringID() { return APITable.GetConnectingStringID(); }
 	public static bool32 ShowLimitedVideoOptions(int32 id) { return APITable.ShowLimitedVideoOptions(id); }
 #endif
+#endif
 }

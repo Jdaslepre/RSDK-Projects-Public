@@ -8,10 +8,10 @@ public struct Mesh
 
 	public void Load(char8* path, Scopes scopeType) mut => id = RSDKTable.LoadMesh(path, (.)scopeType);
 
-	public bool Loaded() mut { return id != (.)(-1); }
+	public bool32 Loaded() mut { return id != (.)(-1); }
 
-	public bool Matches(RSDK.Mesh other) { return this.id == other.id; }
-	public bool Matches(RSDK.Mesh* other)
+	public bool32 Matches(RSDK.Mesh other) { return this.id == other.id; }
+	public bool32 Matches(RSDK.Mesh* other)
 	{
 		return other != null ? id == other.id : id == (.)(-1);
 	}
@@ -56,10 +56,10 @@ public struct Scene3D
 		RSDKTable.AddMeshFrameTo3DScene(modelFrames.id, id, animator, (.)drawMode, matWorld, matNormal, color);
 	}
 
-	public bool Loaded() { return id != (.)(-1); }
+	public bool32 Loaded() { return id != (.)(-1); }
 
-	public bool Matches(RSDK.Scene3D other) { return this.id == other.id; }
-	public bool Matches(RSDK.Scene3D* other)
+	public bool32 Matches(RSDK.Scene3D other) { return this.id == other.id; }
+	public bool32 Matches(RSDK.Scene3D* other)
 	{
 		return other != null ? id == other.id : id == (.)(-1);
 	}

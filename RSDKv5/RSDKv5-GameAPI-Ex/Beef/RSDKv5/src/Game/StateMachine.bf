@@ -52,7 +52,7 @@ public struct StateMachine<T>
 		if (state != null)
 		{
 			RSDKv5.currentState = null;
-			state();
+
 #if RETRO_USE_MOD_LOADER
 			bool32 skipState = modTable.HandleRunState_HighPriority(state);
 

@@ -9,16 +9,16 @@ public struct Channel
 
 	public void SetAttributes(float volume, float pan, float speed) => RSDKTable.SetChannelAttributes(id, volume, pan, speed);
 
-	public void Stop() => RSDKTable.StopChannel(id); 
-	public void Pause() => RSDKTable.PauseChannel(id); 
-	public void Resume() => RSDKTable.ResumeChannel(id); 
-	public bool IsActive() { return RSDKTable.ChannelActive(id); }
+	public void Stop() => RSDKTable.StopChannel(id);
+	public void Pause() => RSDKTable.PauseChannel(id);
+	public void Resume() => RSDKTable.ResumeChannel(id);
+	public bool32 IsActive() { return RSDKTable.ChannelActive(id); }
 
 	public uint32 AudioPos() { return RSDKTable.GetChannelPos(id); }
 
-	public int32 PlayStream(char8 *filename, uint32 startPos, uint32 loopPoint, bool loadASync)
+	public int32 PlayStream(char8* filename, uint32 startPos, uint32 loopPoint, bool loadASync)
 	{
-	    return RSDKTable.PlayStream(filename, id, startPos, loopPoint, loadASync);
+		return RSDKTable.PlayStream(filename, id, startPos, loopPoint, loadASync);
 	}
 
 	public uint8 id;
@@ -26,31 +26,32 @@ public struct Channel
 
 static
 {
-	public static RSDK.Channel[Const.CHANNEL_COUNT] channels = .(.(), .(), .(), .(), .(), .(), .(), .(), .(), .(), .(), .(), .(), .(), .(), .());;
+	public static RSDK.Channel[Const.CHANNEL_COUNT] channels = .();
 }
 
-public struct SoundFX {
-    public uint16 id;
+public struct SoundFX
+{
+	public uint16 id;
 
-    public void Init() mut => id = (.)(-1);
+	public void Init() mut => id = (.)(-1);
 
-    public void Get(char8 *path) mut => id = RSDKTable.GetSfx(path);
+	public void Get(char8* path) mut => id = RSDKTable.GetSfx(path);
 
-	public bool Loaded() mut { return id != (.)(-1); }
+	public int32 Play(int32 loopPoint = 0, int32 priority = 0xFF) { return RSDKTable.PlaySfx(id, loopPoint, priority); }
 
-    public int32 Play(int32 loopPoint = 0, int32 priority = 0xFF) { return RSDKTable.PlaySfx(id, loopPoint, priority); }
+	public void Stop() => RSDKTable.StopSfx(id);
 
-    public void Stop() => RSDKTable.StopSfx(id);
-
-    public bool IsPlaying() { return RSDKTable.IsSfxPlaying(id); }
+	public bool32 IsPlaying() { return RSDKTable.IsSfxPlaying(id); }
 
 #if RETRO_REV0U
 	public static void StopAll() => RSDKTable.StopAllSfx();
 #endif
 
-    public bool Matches(RSDK.SoundFX other) { return this.id == other.id; }
-    public bool Matches(RSDK.SoundFX *other)
-    {
+	public bool32 Loaded() mut { return id != (.)(-1); }
+
+	public bool32 Matches(RSDK.SoundFX other) { return this.id == other.id; }
+	public bool32 Matches(RSDK.SoundFX* other)
+	{
 		return other != null ? id == other.id : id == (.)(-1);
-    }
+	}
 }

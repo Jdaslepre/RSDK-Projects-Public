@@ -40,7 +40,7 @@ public struct String
 	    return RSDKTable.GetStringWidth(aniFrames.aniFrames, listID, &this, start, length, spacing);
 	}
 
-	public void LoadStrings(char8 *filepath) => RSDKTable.LoadStringList(&this, filepath, 16);
+	public void LoadStrings(char8 *filepath) mut => RSDKTable.LoadStringList(&this, filepath, 16);
 	public bool32 Split(RSDK.String *list, int32 startID, int32 count) mut { return RSDKTable.SplitStringList(list, &this, startID, count); }
 
 	public uint16* chars = null;

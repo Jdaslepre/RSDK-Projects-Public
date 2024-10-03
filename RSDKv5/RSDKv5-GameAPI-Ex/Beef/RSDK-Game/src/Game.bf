@@ -43,11 +43,7 @@ public class Game
 			if (registration.name != null)
 			{
 				// modloader stuff needs to be added
-				Dev.Print(.NORMAL, "auto registered:");
 
-				Dev.Print(.NORMAL, registration.name);
-				Dev.PrintInt32(.NORMAL, "entity size", (.)registration.entityClassSize);
-				Dev.PrintInt32(.NORMAL, "static size", (.)registration.staticClassSize);
 #if RETRO_REV0U
 				RSDKTable.RegisterObject(registration.staticVars, registration.name, registration.entityClassSize, registration.staticClassSize,
 					=> registration.update, => registration.lateUpdate, => registration.staticUpdate, => registration.draw,
@@ -73,24 +69,5 @@ public class Game
 			}
 		}
 #endif
-
-		Dev.Print(.POPUP, "Your game, on beef :)");
-		Dev.PrintInt32(.NORMAL, "sizeof(sceneInfo.entity)", sizeof(GameObject.Entity));
-
-		Dev.PrintInt32(.NORMAL, "bool32 size", sizeof(bool32));
-		Dev.PrintInt32(.NORMAL, "Boolean<uint32> size", sizeof(Boolean<uint32>));
-		Dev.PrintInt32(.NORMAL, "Boolean<uint8> size", sizeof(Boolean<uint8>));
-
-		StateMachine<Game> g = .();
-
-		g.Set( => EvilState);
-		g.Run(null);
-
-		StateMachine<Game> e = .();
-
-		e.Copy(&g);
-		e.Run(null);
 	}
-
-	public static void EvilState() => Dev.Print(.NORMAL, "evil");
 }
