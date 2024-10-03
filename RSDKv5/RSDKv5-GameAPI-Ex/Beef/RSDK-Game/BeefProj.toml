@@ -1,0 +1,27 @@
+FileVersion = 1
+Dependencies = {corlib = "*", RSDKv5 = "*"}
+
+[Project]
+Name = "RSDK-Game"
+TargetType = "BeefLib"
+StartupObject = "GameLogic.Program"
+DefaultNamespace = "GameLogic"
+ProcessorMacros = ["RETRO_REV02", "RETRO_REV0U", "GAME_INCLUDE_EDITOR"]
+
+[Configs.Debug.Win64]
+BuildKind = "DynamicLib"
+TargetName = "Game"
+
+[[ProjectFolder.Items]]
+Type = "AutoFolder"
+Name = "Objects"
+
+[[ProjectFolder.Items.Items]]
+Type = "IgnoreFolder"
+Name = "Cutscene"
+AutoInclude = true
+
+[[ProjectFolder.Items.Items]]
+Type = "IgnoreFolder"
+Name = "Title"
+AutoInclude = true
