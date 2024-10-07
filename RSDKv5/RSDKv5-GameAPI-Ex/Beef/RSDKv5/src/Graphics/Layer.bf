@@ -110,10 +110,7 @@ public struct SceneLayer
 		RSDKTable.CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
 	}
 
-	public bool32 Loaded()
-	{
-		return id != (.)(-1);
-	}
+	public bool32 Loaded() { return id != (.)(-1); }
 
 	public bool32 Matches(RSDK.SceneLayer other) { return id == other.id; }
 	public bool32 Matches(RSDK.SceneLayer* other)

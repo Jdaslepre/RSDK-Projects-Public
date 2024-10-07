@@ -1,0 +1,10 @@
+<game>
+    <objects>
+        <object name="MultiplayerHandler" />
+    </objects>
+    <category name="Presentation">
+        <stage name="Menu Online" folder="MenuOnline" id="1" />
+    </category>
+</game>
+
+

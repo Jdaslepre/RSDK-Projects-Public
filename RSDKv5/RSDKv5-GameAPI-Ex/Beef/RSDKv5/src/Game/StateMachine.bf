@@ -2,6 +2,11 @@ using System;
 
 namespace RSDK;
 
+static
+{
+	public static char8* currentState = null;
+}
+
 public struct StateMachine<T>
 {
 	public enum Priority : uint8
@@ -51,7 +56,7 @@ public struct StateMachine<T>
 
 		if (state != null)
 		{
-			RSDKv5.currentState = null;
+			currentState = null;
 
 #if RETRO_USE_MOD_LOADER
 			bool32 skipState = modTable.HandleRunState_HighPriority(state);

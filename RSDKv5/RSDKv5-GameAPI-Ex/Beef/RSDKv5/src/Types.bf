@@ -2,7 +2,7 @@ using System;
 
 namespace RSDK;
 
-public struct bool32 : IEquatable<Self>
+[CRepr] public struct bool32 : IEquatable<Self>
 {
 	public uint32 val;
 
@@ -28,7 +28,7 @@ public struct bool32 : IEquatable<Self>
 	public static bool operator !=(Self lhs, Self rhs) => lhs.val != rhs.val;
 }
 
-public struct Boolean<T> where T : var, IInteger, IMinMaxValue<T>
+[CRepr] public struct Boolean<T> where T : var, IInteger, IMinMaxValue<T>
 {
 	public T val;
 

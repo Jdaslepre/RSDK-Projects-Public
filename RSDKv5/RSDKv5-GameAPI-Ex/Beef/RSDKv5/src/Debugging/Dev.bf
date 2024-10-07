@@ -38,7 +38,7 @@ public static class Dev
 #if RETRO_REV02
 	public static void Print(PrintModes severity, char8 *message, ...)
 	{
-		VarArgs vArgs = VarArgs();
+		VarArgs vArgs = .();
 		vArgs.Start!();
 		RSDKTable.PrintLog((.)severity, message, vArgs.ToVAList());
 		vArgs.End!();

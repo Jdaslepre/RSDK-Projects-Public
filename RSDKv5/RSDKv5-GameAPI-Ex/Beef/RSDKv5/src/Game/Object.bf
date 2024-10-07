@@ -18,7 +18,7 @@ public enum ActiveFlags : uint8
 	ACTIVE_DISABLED = 0xFF,
 }
 
-public enum VariableTypes
+public enum VariableTypes : uint8
 {
 	VAR_UINT8,
 	VAR_UINT16,
@@ -62,7 +62,7 @@ public enum DefaultObjects : uint16
 	TYPE_DEFAULT_COUNT, // max
 }
 
-public enum TileCollisionModes
+public enum TileCollisionModes : uint8
 {
 	TILECOLLISION_NONE, // no tile collisions
 	TILECOLLISION_DOWN, // downwards tile collisions
@@ -152,7 +152,7 @@ public enum TileCollisionModes
 		public uint8 drawGroup;
 		public uint8 collisionLayers;
 		public uint8 collisionPlane;
-		public uint8 collisionMode;
+		public TileCollisionModes collisionMode;
 		public DrawFX drawFX;
 		public InkEffects inkEffect;
 		public Boolean<uint8> visible;
@@ -215,8 +215,8 @@ public enum TileCollisionModes
 #endif
 	}
 
-	/*
-	[CRepr] public class Entity : IEntity
+
+	[CRepr] public class EntityClass : IEntity
 	{
 		public void Create(void* data) { }
 		public void Update() { }
@@ -267,6 +267,7 @@ public enum TileCollisionModes
 		public Boolean<uint8> visible;
 		public Boolean<uint8> onScreen;
 
+		/*
 		public uint16 Slot() { return (.)RSDKTable.GetEntitySlot(this); }
 		public void Destroy() => RSDKTable.ResetEntity(this, 0, null);
 
@@ -314,8 +315,9 @@ public enum TileCollisionModes
 	#if RETRO_USE_MOD_LOADER
 		public void Super(int32 callback, void *data = null) => modTable.Super(classID, callback, data);
 	#endif
+		*/
 	}
-	*/
+
 
 	// untested
 	public static GameObject.Entity* Create(void* data, int32 x, int32 y) { return (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y); }

@@ -25,7 +25,7 @@ public enum EngineStates : uint8
 
 [CRepr] public struct SceneListInfo
 {
-	public int32[4] hash;
+	public uint32[4] hash;
 	public char8[0x20] name;
 	public uint16 sceneOffsetStart;
 	public uint16 sceneOffsetEnd;
@@ -45,7 +45,7 @@ public enum EngineStates : uint8
 
 [CRepr] public struct SceneInfo
 {
-	public GameObject.Entity *entity;
+	public GameObject.Entity* entity;
 	public RSDK.SceneListEntry* listData;
 	public RSDK.SceneListInfo* listCategory;
 	public int32 timeCounter;
@@ -73,9 +73,9 @@ public enum EngineStates : uint8
 
 public static class Stage
 {
-	public static bool32 CheckSceneFolder(char8 *folderName) { return RSDKTable.CheckSceneFolder(folderName); }
+	public static bool32 CheckSceneFolder(char8* folderName) { return RSDKTable.CheckSceneFolder(folderName); }
 	public static bool32 CheckValidScene() { return RSDKTable.CheckValidScene(); }
-	public static void SetScene(char8 *categoryName, char8 *sceneName) => RSDKTable.SetScene(categoryName, sceneName);
+	public static void SetScene(char8* categoryName, char8* sceneName) => RSDKTable.SetScene(categoryName, sceneName);
 	public static void LoadScene() => RSDKTable.LoadScene();
 	public static void SetEngineState(RSDK.EngineStates state) => RSDKTable.SetEngineState((.)state);
 #if RETRO_REV02

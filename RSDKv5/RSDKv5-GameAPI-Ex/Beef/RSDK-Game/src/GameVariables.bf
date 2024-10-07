@@ -75,4 +75,19 @@ namespace GameLogic
 		SLOT_CAMERA3 = 62,
 		SLOT_CAMERA4 = 63,
 	}
+
+	public class GameVariables
+	{
+		public static void** registerGlobals    = null;
+		public static int32 registerGlobalsSize = 0;
+
+		public static function void(void* globals) registerGlobalsInitCB = null;
+
+		public void RegisterGlobals(void** globals, int32 size, function void(void* globals) initCB)
+		{
+			registerGlobals       = globals;
+			registerGlobalsSize   = size;
+			registerGlobalsInitCB = initCB;
+		}
+	}
 }

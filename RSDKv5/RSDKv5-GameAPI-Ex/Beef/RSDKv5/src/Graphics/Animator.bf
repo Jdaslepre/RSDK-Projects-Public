@@ -44,7 +44,7 @@ public struct Animator
 	public RSDK.Hitbox* GetHitbox(uint8 id) mut { return RSDKTable.GetHitbox(&this, id); }
 	public RSDK.SpriteFrame* GetFrame(RSDK.SpriteAnimation aniFrames) { return aniFrames.GetFrame(animationID, frameID); }
 
-	public void DrawSprite(RSDK.Vector2* position, bool screenRelative) mut => RSDKTable.DrawSprite(&this, position, screenRelative);
+	public void DrawSprite(RSDK.Vector2* position, bool32 screenRelative) mut => RSDKTable.DrawSprite(&this, position, screenRelative);
 	public void DrawString(RSDK.Vector2* position, RSDK.String* string, int32 endFrame, int32 textLength, int32 align, int32 spacing, Vector2* charOffsets, bool screenRelative) mut => RSDKTable.DrawText(&this, position, string, endFrame, textLength, align, spacing, null, charOffsets, screenRelative);
 
 #if RETRO_REV0U

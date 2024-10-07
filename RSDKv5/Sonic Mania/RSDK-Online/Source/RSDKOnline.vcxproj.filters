@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="RSDK-Online.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Camera.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
@@ -91,6 +88,8 @@
     <ClCompile Include="Objects\Global\PlayerManage.cpp">
       <Filter>Source Files\Objects\Global</Filter>
     </ClCompile>
+    <ClCompile Include="RSDK-Impl.cpp" />
+    <ClCompile Include="RSDK-Online.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\Game.hpp">
@@ -101,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\GameAPI\CPP\GameAPI\GameVariables.hpp">
       <Filter>GameAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="RSDK-Online.hpp">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera.hpp">
       <Filter>Source Files\Objects</Filter>
@@ -192,6 +188,8 @@
     <ClInclude Include="Objects\Global\PlayerManage.hpp">
       <Filter>Source Files\Objects\Global</Filter>
     </ClInclude>
+    <ClInclude Include="RSDK-Impl.hpp" />
+    <ClInclude Include="RSDK-Online.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameAPI">
